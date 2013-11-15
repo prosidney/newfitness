@@ -233,7 +233,7 @@ public class Aluno implements Serializable {
 	}
 
 	public Status getStatus() {
-		
+		//FIXME tirar isso daqui
 		if(status == null){
 			GregorianCalendar today = new GregorianCalendar();
 			today.setTime(new Date());
@@ -244,7 +244,7 @@ public class Aluno implements Serializable {
 			
 			List<Payment> payments = this.getPayments();
 			
-			if(payments.size() > 0){
+			if(payments != null && payments.size() > 0){
 				Payment lastPayment = payments.get(0);
 				
 				GregorianCalendar lastExpirationDateGC = new GregorianCalendar();

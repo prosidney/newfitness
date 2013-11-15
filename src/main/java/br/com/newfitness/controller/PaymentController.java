@@ -1,5 +1,6 @@
 package br.com.newfitness.controller;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -80,7 +81,9 @@ public class PaymentController {
 			pay.setAluno(aluno);
 			pay.setExpirationDate(gc.getTime());
 			pay.setDtPayment(today);
-			pay.setAmount(parameterDao.get().getAmount());
+			//FIXME colocar isso em tela de parametrização
+			/*pay.setAmount(parameterDao.get().getAmount());*/
+			pay.setAmount(new BigDecimal(50.00));
 		}
 		
 		model.addAttribute("payment", pay);

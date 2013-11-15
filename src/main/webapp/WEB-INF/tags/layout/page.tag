@@ -16,15 +16,15 @@
         <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
         
 		<!-- Le styles -->
-		<link href="/newfitness/css/bootstrap.css" rel="stylesheet">
+		<link href="/css/bootstrap.css" rel="stylesheet">
 		<style type="text/css">
 		  body {
 		    padding-top: 60px;
 		    padding-bottom: 40px;
 		  }
 		</style>
-		<link href="/newfitness/css/bootstrap-responsive.css" rel="stylesheet">
-		<link href="/newfitness/css/ui-darkness/jquery-ui-1.10.3.custom.css" rel="stylesheet">
+		<link href="/css/bootstrap-responsive.css" rel="stylesheet">
+		<link href="/css/ui-darkness/jquery-ui-1.10.3.custom.css" rel="stylesheet">
 		
 		<!-- Le fav and touch icons -->
 		<link rel="shortcut icon" href="../assets/ico/favicon.ico">
@@ -39,8 +39,8 @@
         <title>${title}</title>
  
         <!-- Essential scripts -->
-        <script type="text/javascript" src="/newfitness/js/jquery-1.9.1.js"></script>
-        <script type="text/javascript" src="/newfitness/js/jquery-ui-1.10.3.custom.js"></script>
+        <script type="text/javascript" src="/js/jquery-1.9.1.js"></script>
+        <script type="text/javascript" src="/js/jquery-ui-1.10.3.custom.js"></script>
  
         <!-- Process the given input fragment -->
         <jsp:invoke fragment="extraHeader"/>
@@ -64,20 +64,21 @@
         <!-- Le javascript
 	    ================================================== -->
 	    <!-- Placed at the end of the document so the pages load faster -->
-	    <script src="/newfitness/js/bootstrap.js"></script>
-	    <script src="/newfitness/js/jquery-1.9.1.js"></script>
-	    <script src="/newfitness/js/jquery-ui-1.10.3.custom.js"></script>
-	    <script src="/newfitness/js/bootstrap-transition.js"></script>
-	    <script src="/newfitness/js/bootstrap-alert.js"></script>
-	    <script src="/newfitness/js/bootstrap-modal.js"></script>
-	    <script src="/newfitness/js/bootstrap-dropdown.js"></script>
-	    <script src="/newfitness/js/bootstrap-scrollspy.js"></script>
-	    <script src="/newfitness/js/bootstrap-tab.js"></script>
-	    <script src="/newfitness/js/bootstrap-tooltip.js"></script>
-	    <script src="/newfitness/js/bootstrap-popover.js"></script>
-	    <script src="/newfitness/js/bootstrap-button.js"></script>
-	    <script src="/newfitness/js/bootstrap-collapse.js"></script>
-	    <script src="/newfitness/js/bootstrap-carousel.js"></script>
-	    <script src="/newfitness/js/bootstrap-typeahead.js"></script>
+	    <script src="/js/bootstrap.js"></script>
+	    <script src="/js/jquery-1.9.1.js"></script>
+	    <script src="/js/jquery-ui-1.10.3.custom.js"></script>
+	    <script src="/js/bootstrap-transition.js"></script>
+	    <script src="/js/bootstrap-alert.js"></script>
+	    <script src="/js/bootstrap-modal.js"></script>
+	    <script src="/js/bootstrap-dropdown.js"></script>
+	    <script src="/js/bootstrap-scrollspy.js"></script>
+	    <script src="/js/bootstrap-tab.js"></script>
+	    <script src="/js/bootstrap-tooltip.js"></script>
+	    <script src="/js/bootstrap-popover.js"></script>
+	    <script src="/js/bootstrap-button.js"></script>
+	    <script src="/js/bootstrap-collapse.js"></script>
+	    <script src="/js/bootstrap-carousel.js"></script>
+	    <script src="/js/bootstrap-typeahead.js"></script>
     </body>
 </html>
+

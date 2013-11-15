@@ -234,7 +234,7 @@ public class Aluno implements Serializable {
 
 	public Status getStatus() {
 		//FIXME tirar isso daqui
-		if(status == null){
+/*		if(status == null){
 			GregorianCalendar today = new GregorianCalendar();
 			today.setTime(new Date());
 			today.set(Calendar.HOUR_OF_DAY,0);
@@ -271,7 +271,9 @@ public class Aluno implements Serializable {
 			}
 		}
 		
-		return status;
+		return status;*/
+		
+		return Status.VA;
 	}
 
 	public void setStatus(Status status) {

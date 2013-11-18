@@ -31,7 +31,7 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect </prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
 				<!--  
 				<prop key="hibernate.max_fetch_depth">3</prop>
 				<prop key="hibernate.jdbc.fetch_size">50</prop>
@@ -39,7 +39,7 @@
 				-->
 				<prop key="hibernate.show_sql">true</prop>
 			    <!--create the database schema on startup if required -->
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.hbm2ddl.auto">create</prop>
 				<prop key="hibernate.connection.pool_size">1</prop>
 			    <prop key="hibernate.format_sql">true</prop>
 			    <prop key="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
@@ -47,11 +47,9 @@
 		</property>
 		<property name="annotatedClasses">
 			<list>
-				<value>br.com.newfitness.model.Academia</value>
+				<value>br.com.newfitness.model.Gym</value>
 				<value>br.com.newfitness.model.Aluno</value>
 				<value>br.com.newfitness.model.Payment</value>
-				<value>br.com.newfitness.model.Exercicio</value>
-				<value>br.com.newfitness.model.Treino</value>
 				<value>br.com.newfitness.model.Parameter</value>
 			</list>
 		</property>

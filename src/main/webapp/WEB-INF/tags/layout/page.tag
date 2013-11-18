@@ -8,6 +8,7 @@
 <%@ attribute name="extraBottom" fragment="true" description="Extra code to put before </body>" %>
  
 <%@ taglib tagdir="/WEB-INF/tags/layout" prefix="layout" %>
+<%@ taglib prefix="c" 	 uri="http://java.sun.com/jsp/jstl/core"%>
  
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -41,6 +42,26 @@
         <!-- Essential scripts -->
         <script type="text/javascript" src="/js/jquery-1.9.1.js"></script>
         <script type="text/javascript" src="/js/jquery-ui-1.10.3.custom.js"></script>
+        
+        <script type="text/javascript">
+			function enforceNumericValue(obj){  
+				 //  check for valid numeric strings	
+				 var strValidChars = "0123456789";
+				 var strChar;
+				 var blnResult = true;
+	
+				 // if (strString.length == 0) return false;
+	
+				 //  test strString consists of valid characters listed above
+				 for (i = 0; i < obj.value.length && blnResult == true; i++){
+				    strChar = obj.value.charAt(i);
+				    if (strValidChars.indexOf(strChar) == -1){
+						blnResult = false;
+					 	obj.value = obj.value.substring(0, obj.value.length-1);
+				    }
+				 }
+		  	}	
+		 </script>
  
         <!-- Process the given input fragment -->
         <jsp:invoke fragment="extraHeader"/>
@@ -52,7 +73,14 @@
             <layout:header user="${user}"/>
  
             <!-- Renders the tag body inside a DIV -->
-            <div id="content"><jsp:doBody/></div>
+            <div id="content">
+            	<c:if test="${errorMessage != null}">
+        			<span class="error">
+		    			<c:out value="${errorMessage}"/>
+        			</span>
+        		</c:if>
+            	<jsp:doBody/>
+            </div>
  
             <!-- Renders the page footer -->
             <layout:footer/>

@@ -5,21 +5,21 @@ import org.springframework.stereotype.Repository;
 
 import br.com.newfitness.dao.AbstractDao;
 import br.com.newfitness.dao.GenericDao;
-import br.com.newfitness.model.Academia;
+import br.com.newfitness.model.Gym;
 
 @Repository("academiaDao")
-public class AcademiaDao extends AbstractDao<Academia> implements GenericDao<Academia> {
+public class AcademiaDao extends AbstractDao<Gym> implements GenericDao<Gym> {
 
 	public AcademiaDao() {
-		super(Academia.class);
+		super(Gym.class);
 	}
 
 	public void setSessionFactory(SessionFactory sessionFactory){
 		this.sessionFactory = sessionFactory;
 	}
 
-	public Academia findById(Integer id) {
-		return (Academia) sessionFactory.getCurrentSession()
+	public Gym findById(Integer id) {
+		return (Gym) sessionFactory.getCurrentSession()
 										.getNamedQuery("Aparelho.findById")
 										.setParameter("id", id).uniqueResult();
 	}

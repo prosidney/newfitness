@@ -2,9 +2,28 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" 	 uri="http://java.sun.com/jsp/jstl/core"%>
 <layout:page title="New Fitness" description="Home" keywords="amazing, app, New Fitness" user="Admin">
+    <jsp:attribute name="extraHeader">
+    	<style>
+			.error {
+				color: #ff0000;
+			}
+			 
+			.errorblock {
+				color: #000;
+				background-color: #ffEEEE;
+				border: 3px solid #ff0000;
+				padding: 8px;
+				margin: 16px;
+			}
+    	</style>
+    </jsp:attribute>
     <jsp:body>
         <center>
-        
+        	<c:if test="${errorMessage != null}">
+        		<span class="error">
+		        	<c:out value="${errorMessage}"/>
+        		</span>
+        	</c:if>
         	<form method="post" action="findClient.do">
         		<table class="table" style="width: 30%">
         			<tr>
@@ -19,7 +38,7 @@
         	</form>
 			<table class="table table-hover" style="width: 50%">
 				<tr>
-					<th colspan="7" style="text-align: center;" style="width: 80%"><c:out value="Alunos" /></th>
+					<th colspan="7" style="text-align: center;" style="width: 80%"><c:out value="Alunos (${qtde})" /></th>
 				</tr>
 				<tr>
 					<th><c:out value="Matricula" /></th>

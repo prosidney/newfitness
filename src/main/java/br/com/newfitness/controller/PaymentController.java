@@ -1,11 +1,10 @@
 package br.com.newfitness.controller;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +13,6 @@ import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -26,14 +24,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import br.com.newfitness.dao.impl.AlunoDao;
+import br.com.newfitness.dao.impl.GymDao;
 import br.com.newfitness.dao.impl.ParameterDao;
 import br.com.newfitness.dao.impl.PaymentDao;
 import br.com.newfitness.model.Aluno;
+import br.com.newfitness.model.Gym;
 import br.com.newfitness.model.Payment;
 
 
 @Controller
-@SuppressWarnings({ "rawtypes", "unchecked" })
 public class PaymentController {
 	
 	@Autowired
@@ -44,6 +43,9 @@ public class PaymentController {
 	
 	@Autowired
 	ParameterDao parameterDao;
+	
+	@Autowired
+	GymDao gymDao;
 	
 	@Transactional(readOnly=true)
 	@RequestMapping(value="/viewPayments.do", method=RequestMethod.GET)
@@ -65,6 +67,13 @@ public class PaymentController {
 	@Transactional(readOnly=true)
 	@RequestMapping(value="/addPayment.do", method={RequestMethod.GET})
 	public String showAddPaymentPage(HttpServletRequest request, HttpServletResponse response, Model model){
+		List<Gym> findAll = gymDao.findAll();
+		
+		if(findAll.size() == 0){
+			request.setAttribute("errorMessage", "Necessário entrar na tela de administração da academia para realizar os cadastros básicos");
+			return "admin";
+		}
+		
 		Payment pay = new Payment();
 		
 		String paymentId = request.getParameter("payId");
@@ -81,9 +90,7 @@ public class PaymentController {
 			pay.setAluno(aluno);
 			pay.setExpirationDate(gc.getTime());
 			pay.setDtPayment(today);
-			//FIXME colocar isso em tela de parametrizaÃ§Ã£o
-			/*pay.setAmount(parameterDao.get().getAmount());*/
-			pay.setAmount(new BigDecimal(50.00));
+			pay.setAmount(findAll.get(0).getAmount());
 		}
 		
 		model.addAttribute("payment", pay);

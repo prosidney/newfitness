@@ -23,8 +23,8 @@
 						data-toggle="dropdown">Cadastros <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li class="nav-header">Administração</li>
-							<li><a href="<c:url value="/pages/admin"/>">Administração de Alunos</a></li>
-							<li><a href="#" onclick="window.alert('Trial version')">Administração da academia</a></li>
+							<li><a href="<c:url value="/pages/admin"/>">Alunos</a></li>
+							<li><a href="<c:url value="/pages/gym"/>">Academia</a></li>
 							<li class="divider"></li>
 						</ul></li>
 				</ul>

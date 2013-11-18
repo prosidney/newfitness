@@ -1,7 +1,5 @@
 package br.com.newfitness.model;
 
-import static javax.persistence.GenerationType.AUTO;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -17,7 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -26,7 +23,7 @@ public class Payment implements Serializable, Comparable<Payment> {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy=AUTO)
+	@GeneratedValue
 	private Integer id;
 	
 	@NotNull(message="O Valor deve ser especificado")
@@ -37,7 +34,6 @@ public class Payment implements Serializable, Comparable<Payment> {
 	private Date expirationDate;
 	
 	@DateTimeFormat(pattern="dd/MM/yyyy")
-	@NotNull(message="A data de pagamento deve ser especificada")
 	private Date dtPayment;
 	
 	@Enumerated(EnumType.STRING)
@@ -102,5 +98,12 @@ public class Payment implements Serializable, Comparable<Payment> {
 		} else{
 			return -1;
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "Payment [amount=" + amount + ", expirationDate="
+				+ expirationDate + ", dtPayment=" + dtPayment
+				+ ", paymentType=" + paymentType + "]";
 	}
 }

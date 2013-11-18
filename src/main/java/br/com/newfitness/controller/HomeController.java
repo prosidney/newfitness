@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.newfitness.dao.impl.AcademiaDao;
-import br.com.newfitness.model.Academia;
+import br.com.newfitness.model.Gym;
 
 @Controller
 public class HomeController {
@@ -25,9 +25,9 @@ public class HomeController {
 	@RequestMapping(value="ola.do", method=RequestMethod.GET)
 	public String showIndex(HttpServletRequest request,HttpServletResponse response){	
 		
-		List<Academia> all = academiaDao.findAll();
+		List<Gym> all = academiaDao.findAll();
 		
-		for (Academia academia : all) {
+		for (Gym academia : all) {
 			System.out.println(academia);
 		}
 		
@@ -36,11 +36,11 @@ public class HomeController {
 	
 	@Transactional(readOnly=true)
 	@RequestMapping(value="olaJson.do", method=RequestMethod.GET)
-	public @ResponseBody Academia showIndexJson(HttpServletRequest request,HttpServletResponse response) throws Exception{	
+	public @ResponseBody Gym showIndexJson(HttpServletRequest request,HttpServletResponse response) throws Exception{	
 		
-		List<Academia> all = academiaDao.findAll();
+		List<Gym> all = academiaDao.findAll();
 		
-		for (Academia academia : all) {
+		for (Gym academia : all) {
 			System.out.println(academia);
 			
 			return academia;
@@ -51,9 +51,9 @@ public class HomeController {
 	
 	@Transactional(readOnly=true)
 	@RequestMapping(value="olaJson1.do", method=RequestMethod.GET)
-	public @ResponseBody List<Academia> showIndexJson1(HttpServletRequest request,HttpServletResponse response) throws Exception{	
+	public @ResponseBody List<Gym> showIndexJson1(HttpServletRequest request,HttpServletResponse response) throws Exception{	
 		
-		List<Academia> findAll = academiaDao.findAll();
+		List<Gym> findAll = academiaDao.findAll();
 		
 		return findAll;
 	}	

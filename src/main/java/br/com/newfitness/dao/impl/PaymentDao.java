@@ -1,5 +1,9 @@
 package br.com.newfitness.dao.impl;
 
+import java.util.List;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
@@ -8,6 +12,7 @@ import br.com.newfitness.dao.GenericDao;
 import br.com.newfitness.model.Payment;
 
 @Repository("paymentDao")
+@SuppressWarnings("unchecked")
 public class PaymentDao extends AbstractDao<Payment> implements GenericDao<Payment> {
 
 	public PaymentDao() {
@@ -25,5 +30,19 @@ public class PaymentDao extends AbstractDao<Payment> implements GenericDao<Payme
 		} else{
 			return super.merge(payment);
 		}
+	}
+
+	public List<Payment> findPendentPayments(Integer matricula) {
+		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
+								.append("pm.aluno.matricula = :mat ")
+								.append("AND pm.expirationDate < sysdate ")
+								.append("AND pm.dtPayment = null ");
+		
+		Session session = sessionFactory.getCurrentSession();
+		
+		Query query = session.createQuery(hql.toString());
+		query.setParameter("mat", matricula);
+		
+		return (List<Payment>) query.list();
 	}
 }

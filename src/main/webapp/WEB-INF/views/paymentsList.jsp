@@ -20,7 +20,14 @@
 				</tr>
 				<c:set var="total" scope="request" value="${0}"/>
 				<c:forEach var="payment" items="${payments}">
-					<tr>
+						<c:choose>
+							<c:when test="${payment.dtPayment != null}">
+							  	<tr class="success">
+							</c:when>
+							<c:otherwise>
+								<tr class="warning">
+							</c:otherwise>						
+						</c:choose>
 						<td style="width: 20%"><c:out value="${payment.aluno.nome}" /></td>
 						<td style="width: 5%"><c:out value="${payment.amount}" /></td>
 						<td><fmt:formatDate pattern="dd/MM/yyyy" value="${payment.expirationDate}" /></td>
@@ -33,7 +40,8 @@
 					<c:set var="total" scope="request" value="${total + payment.amount}"/>
 				</c:forEach>
 				<tr>
-					<th colspan="7" style="text-align: center;" style="width: 80%"><c:out value="Total = ${total} R$" /></th>
+					<th colspan="7" style="text-align: center;" style="width: 80%"><c:out value="Total a pagar= ${total} R$" /></th>
+					<th colspan="7" style="text-align: center;" style="width: 80%"><c:out value="Total pago= ${total} R$" /></th>
 				</tr>
 			</table>
 			<a class="btn" href="<c:url value="addPayment.do?mat=${mat}"/>"><i class="icon-plus-sign icon-black"></i> Novo Pagamento </a>

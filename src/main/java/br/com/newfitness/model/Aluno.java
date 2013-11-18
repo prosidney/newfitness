@@ -4,12 +4,11 @@ import static javax.persistence.GenerationType.AUTO;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -18,6 +17,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
@@ -48,13 +48,8 @@ public class Aluno implements Serializable {
 	@DateTimeFormat(pattern="dd/MM/yyyy")
 	private Date dataNasc;
 	
-	@NotEmpty(message="O bairro deve ser especificado")
-	private String Bairro;
-	
-	@NotEmpty(message="A rua deve ser especificado")
-	private String Rua;
-	
-	private Integer numero;
+	@NotEmpty(message="O endereço deve ser especificado")
+	private String endereco;
 	
 	private String telefoneFixo;
 	
@@ -71,17 +66,18 @@ public class Aluno implements Serializable {
 	
 	private String observacao;
 	
+	@Transient
+	private Status status;
+	
 	@Enumerated(EnumType.STRING)  
-	private Sexo sexo;
+	private Genre sexo;
 	
 	//bi-directional many-to-one association to Exercicio
-	@OneToMany(mappedBy="aluno", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="aluno", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Payment> payments;
 
 	private Date registerDate; 
 	
-	private Status status;
-
 	public Aluno() {
 	}
 
@@ -125,28 +121,12 @@ public class Aluno implements Serializable {
 		this.dataNasc = dataNasc;
 	}
 
-	public String getBairro() {
-		return Bairro;
+	public String getEndereco() {
+		return endereco;
 	}
 
-	public void setBairro(String bairro) {
-		Bairro = bairro;
-	}
-
-	public String getRua() {
-		return Rua;
-	}
-
-	public void setRua(String rua) {
-		Rua = rua;
-	}
-
-	public Integer getNumero() {
-		return numero;
-	}
-
-	public void setNumero(Integer numero) {
-		this.numero = numero;
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
 	}
 
 	public String getTelefoneFixo() {
@@ -205,11 +185,11 @@ public class Aluno implements Serializable {
 		this.diaVencimentoParcela = diaVencimentoParcela;
 	}
 
-	public Sexo getSexo() {
+	public Genre getSexo() {
 		return sexo;
 	}
 
-	public void setSexo(Sexo sexo) {
+	public void setSexo(Genre sexo) {
 		this.sexo = sexo;
 	}
 
@@ -233,47 +213,7 @@ public class Aluno implements Serializable {
 	}
 
 	public Status getStatus() {
-		//FIXME tirar isso daqui
-/*		if(status == null){
-			GregorianCalendar today = new GregorianCalendar();
-			today.setTime(new Date());
-			today.set(Calendar.HOUR_OF_DAY,0);
-			today.set(Calendar.MINUTE,0);
-			today.set(Calendar.SECOND,0);
-			today.set(Calendar.MILLISECOND,0);
-			
-			List<Payment> payments = this.getPayments();
-			
-			if(payments != null && payments.size() > 0){
-				Payment lastPayment = payments.get(0);
-				
-				GregorianCalendar lastExpirationDateGC = new GregorianCalendar();
-				lastExpirationDateGC.setTime(lastPayment.getExpirationDate());
-				
-				lastExpirationDateGC.add(Calendar.MONTH, 1);
-				
-				if(lastExpirationDateGC.after(today) || lastExpirationDateGC.equals(today)){
-					this.setStatus(Status.ED);
-				} else {
-					this.setStatus(Status.VA);
-				}
-			} else {
-				GregorianCalendar registerDt = new GregorianCalendar();
-				registerDt.setTime(registerDate);
-
-				registerDt.add(Calendar.MONTH, 1);
-				
-				if(registerDt.after(today) || registerDt.equals(today)){
-					this.setStatus(Status.ED);
-				} else {
-					this.setStatus(Status.VA);
-				}
-			}
-		}
-		
-		return status;*/
-		
-		return Status.VA;
+		return status;
 	}
 
 	public void setStatus(Status status) {
@@ -282,12 +222,12 @@ public class Aluno implements Serializable {
 
 	public enum Status {
 
-		VA("Vencida"), ED("Em dia");
+		OK("Vencida"), NOK("Em dia");
 
 		private String desc;	
 		
-		private Status(String descricao) {
-			this.desc = descricao;
+		private Status(String desc) {
+			this.desc = desc;
 		}
 		
 		public String getSigla(){

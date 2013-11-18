@@ -11,7 +11,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.newfitness.dao.impl.AcademiaDao;
-import br.com.newfitness.model.Academia;
+import br.com.newfitness.model.Gym;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:springconfiguration-test.xml"})
@@ -24,9 +24,9 @@ public class AparelhoDaoTest {
 
 	@Test
 	public void testFindById() {
-		List<Academia> all = aparelhoDao.findAll();
+		List<Gym> all = aparelhoDao.findAll();
 		
-		for (Academia academia : all) {
+		for (Gym academia : all) {
 			System.out.println(academia);
 		}
 	}

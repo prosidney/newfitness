@@ -20,7 +20,14 @@ public abstract class AbstractDao<T> implements GenericDao<T>{
 	
 	public List<T> findAll(){
 		log.info("finding all " + typeClass.getName() + " instances");
-		return sessionFactory.getCurrentSession().createCriteria(typeClass).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+		StringBuilder hql = new StringBuilder("SELECT obj FROM " + typeClass.getName() + " obj");
+		
+		Session session = sessionFactory.getCurrentSession();
+		
+		Query query = session.createQuery(hql.toString());
+		
+/*		return sessionFactory.getCurrentSession().createCriteria(typeClass).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();*/
+		return (List<T>) query.list();
 	}
 	
 	/** 
@@ -36,9 +43,17 @@ public abstract class AbstractDao<T> implements GenericDao<T>{
 		return instance;		
 	}
 	
+	public List<T> save(List<T> instance){
+		log.info("inserindo dados na tabela " + typeClass.getName());
+		
+		for (T t : instance) {
+			sessionFactory.getCurrentSession().saveOrUpdate(t);
+		}
+		return instance;		
+	}
+	
 	public T merge(T instance){
 		log.info("inserindo dados na tabela " + typeClass.getName());
-		/*sessionFactory.getCurrentSession().saveOrUpdate(instance);*/
 		sessionFactory.getCurrentSession().merge(instance);
 		return instance;		
 	}

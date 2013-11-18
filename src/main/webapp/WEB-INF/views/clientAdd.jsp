@@ -17,33 +17,6 @@
 				margin: 16px;
 			}
     	</style>
-		<script type="text/javascript">
-			function enforceNumericValue(obj){  
-				 //  check for valid numeric strings	
-				   {
-					   var strValidChars = "0123456789";
-					   var strChar;
-					   var blnResult = true;
-		
-					  // if (strString.length == 0) return false;
-		
-					   //  test strString consists of valid characters listed above
-					   for (i = 0; i < obj.value.length && blnResult == true; i++){
-					      strChar = obj.value.charAt(i);
-					      if (strValidChars.indexOf(strChar) == -1){
-						 blnResult = false;
-						 obj.value = obj.value.substring(0, obj.value.length-1);
-					      }
-					   }
-					   //return blnResult;
-				   }
-		  	}	
-			
-		    $(function() {
-			    $( "#datepicker" ).datepicker();
-			    $( "#datepicker" ).datepicker( "option", "dateFormat", "mm/dd/yy" );
-			});
-		 </script>
     </jsp:attribute>
     <jsp:body>
 		<center>
@@ -78,23 +51,13 @@
 					</tr>
 					<tr>
 						<td>Data de Nascimento:</td>
-						<td><form:input id="datepicker" path="dataNasc" class="span3" style="width: 80px" maxlength="10" /></td>
+						<td><form:input path="dataNasc" class="span3" style="width: 80px" maxlength="10" /></td>
 						<td><form:errors path="dataNasc" cssClass="error" /></td>
 					</tr>
 					<tr>
-						<td>Bairro:</td>
-						<td><form:input path="bairro" class="span3" /></td>
-						<td><form:errors path="bairro" cssClass="error" /></td>
-					</tr>
-					<tr>
-						<td>Rua:</td>
-						<td><form:input path="rua" class="span3"/></td>
-						<td><form:errors path="rua" cssClass="error" /></td>
-					</tr>
-					<tr>
-						<td>Número:</td>
-						<td><form:input path="numero" class="span3" style="width: 60px"/></td>
-						<td><form:errors path="numero" cssClass="error" /></td>
+						<td>Endereco:</td>
+						<td><form:textarea path="endereco" class="span3" /></td>
+						<td><form:errors path="endereco" cssClass="error" /></td>
 					</tr>
 					<tr>
 						<td>Tel Fixo:</td>

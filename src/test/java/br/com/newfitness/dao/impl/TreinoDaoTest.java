@@ -12,7 +12,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.newfitness.dao.impl.TreinoDao;
-import br.com.newfitness.model.Treino;
+import br.com.newfitness.model.Training;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:springconfiguration-test.xml"})
@@ -26,14 +26,15 @@ public class TreinoDaoTest {
 	@Test
 	@Ignore
 	public void testFindById() {
-		Treino treino = treinoDao.findById(1);
+		Training treino = treinoDao.findById(1);
 		
 		System.out.println(treino.getExercicios());
 	}
 
 	@Test
+	@Ignore
 	public void testFindByAlunoMatricula() {
-		List<Treino> treinos = treinoDao.findByAlunoMatricula(1);
+		List<Training> treinos = treinoDao.findByAlunoMatricula(1);
 		
 		System.out.println(treinos);
 	}

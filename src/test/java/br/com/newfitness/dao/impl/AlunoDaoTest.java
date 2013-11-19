@@ -1,7 +1,8 @@
 package br.com.newfitness.dao.impl;
 
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 
 import org.junit.Ignore;
@@ -34,7 +35,22 @@ public class AlunoDaoTest {
 	Util util;
 	
 	@Test
+	@Ignore
 	public void test() throws BusinessException {
+		Aluno aluno = alunoDao.findByMatricula(1);
+		
+		for (Payment pay : aluno.getPayments()) {
+			pay.setAluno(null);
+			
+			paymentDao.delete(pay);
+		}
+		
+		System.out.println(aluno.getPayments().size());
+	}
+	
+	@Test
+	@Ignore
+	public void test1() throws BusinessException {
 		Aluno aluno = alunoDao.findByMatricula(1);
 		
 		GregorianCalendar gc = new GregorianCalendar();
@@ -53,15 +69,14 @@ public class AlunoDaoTest {
 	}
 	
 	@Test
-	public void test1() throws BusinessException {
+	@Ignore
+	public void test2() throws BusinessException {
 		Aluno aluno = alunoDao.findByMatricula(1);
 		
 		System.out.println(aluno.getPayments().size());
 		for (Payment pay : aluno.getPayments()) {
 			System.out.println(pay);
 		}
-		
-		alunoDao.save(aluno);
 	}
 
 }

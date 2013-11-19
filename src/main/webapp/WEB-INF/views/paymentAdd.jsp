@@ -18,31 +18,9 @@
 			}
     	</style>
 		<script type="text/javascript">
-			function enforceNumericValue(obj){  
-				 //  check for valid numeric strings	
-				   {
-					   var strValidChars = "0123456789";
-					   var strChar;
-					   var blnResult = true;
-		
-					  // if (strString.length == 0) return false;
-		
-					   //  test strString consists of valid characters listed above
-					   for (i = 0; i < obj.value.length && blnResult == true; i++){
-					      strChar = obj.value.charAt(i);
-					      if (strValidChars.indexOf(strChar) == -1){
-						 blnResult = false;
-						 obj.value = obj.value.substring(0, obj.value.length-1);
-					      }
-					   }
-					   //return blnResult;
-				   }
-		  	}	
-			
 		    $(function() {
-			    $( "#datepicker" ).datepicker( "option", "dateFormat", "dd/mm/yy" );
-			    $( "#datepicker" ).datepicker();
-			    $j("#datepicker").datepicker({altField: '#expiration', altFormat: 'dd/mm/yy'});
+			    $( "#datepickerExpirationDate" ).datepicker({ dateFormat: "dd/mm/yy" });
+			    $( "#datepickerDtPayment" ).datepicker({ dateFormat: "dd/mm/yy" });
 			});
 		 </script>
     </jsp:attribute>
@@ -60,13 +38,12 @@
 					</tr>
 					<tr>
 						<td>Data de vencimento:</td>
-						<form:hidden id="expiration" path="expirationDate" />					
-						<td><input type="text" id="datepicker"></td>
+						<td><form:input id="datepickerExpirationDate" path="expirationDate" /></td>
 						<td><form:errors path="expirationDate" cssClass="error" /></td>
 					</tr>																
 					<tr>
 						<td>Data do pagamento:</td>
-						<td><form:input id="datepicker" path="dtPayment" class="span3" style="width: 80px" maxlength="10" /></td>
+						<td><form:input id="datepickerDtPayment" path="dtPayment"/></td>
 						<td><form:errors path="dtPayment" cssClass="error" /></td>
 					</tr>
 					<tr>

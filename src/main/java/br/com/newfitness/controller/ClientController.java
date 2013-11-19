@@ -1,8 +1,6 @@
 package br.com.newfitness.controller;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -62,18 +60,10 @@ public class ClientController {
 		}
 		
 		try{
-			/*if(aluno.getMatricula() == null){*/
+			if(aluno.getMatricula() == null){
 				aluno.setRegisterDate(new Date());
-				/*aluno.setPayments(util.generatePayments(aluno, new Date()));*/
-				
-				GregorianCalendar gc = new GregorianCalendar();
-				gc.set(Calendar.DAY_OF_MONTH, 1);
-				gc.set(Calendar.MONTH, 0);
-				gc.set(Calendar.YEAR, 2013);
-				
-				aluno.setPayments(util.generatePayments(aluno, gc.getTime()));
-				
-			/*}*/
+				aluno.setPayments(util.generatePayments(aluno, new Date()));
+			}
 			clientDao.save(aluno);
 			
 			List<Aluno> all = clientDao.findAll();

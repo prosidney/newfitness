@@ -45,4 +45,20 @@ public class PaymentDao extends AbstractDao<Payment> implements GenericDao<Payme
 		
 		return (List<Payment>) query.list();
 	}
+	
+	public List<Payment> findAllPendentPayments() {
+		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
+									.append("pm.expirationDate < sysdate ")
+									.append("AND pm.dtPayment = null ");
+		
+		return sessionFactory.getCurrentSession().createQuery(hql.toString()).list();
+	}
+	
+	public List<Payment> findAllPaidPayments() {
+		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
+		.append("pm.expirationDate < sysdate ")
+		.append("AND pm.dtPayment != null ");
+		
+		return sessionFactory.getCurrentSession().createQuery(hql.toString()).list();
+	}
 }

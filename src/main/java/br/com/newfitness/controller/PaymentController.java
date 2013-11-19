@@ -1,6 +1,8 @@
 package br.com.newfitness.controller;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
@@ -17,8 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,7 +49,7 @@ public class PaymentController {
 	
 	@Transactional(readOnly=true)
 	@RequestMapping(value="/viewPayments.do", method=RequestMethod.GET)
-	public String showPayments(HttpServletRequest request, HttpServletResponse response){
+	public String showClientPayments(HttpServletRequest request, HttpServletResponse response){
 		Aluno client = new Aluno();
 		
 		String matId = request.getParameter("mat");
@@ -128,10 +128,29 @@ public class PaymentController {
 		return "paymentsList";
 	}
 	
-	@InitBinder
-	public void initBinder(WebDataBinder webDataBinder) {
-/*		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-		dateFormat.setLenient(false);
-		webDataBinder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));*/
-	 }
+	@Transactional(readOnly=true)
+	@RequestMapping(value="/paymentsReport.do", method=RequestMethod.GET)
+	public String showAllPayments(HttpServletRequest request, HttpServletResponse response){
+		List<Payment> allPaidPayments = paymentDao.findAllPaidPayments();
+		List<Payment> allPendentPayments = paymentDao.findAllPendentPayments();
+		
+		List<Payment> all = new ArrayList<Payment>();
+		
+		all.addAll(allPendentPayments);
+		all.addAll(allPaidPayments);
+		
+		if(all != null && all.size() > 1){
+			Collections.sort(all);
+		}
+		
+		request.setAttribute("payments", all);
+		request.setAttribute("qtPendent", allPendentPayments.size());
+		request.setAttribute("qtPaid", allPaidPayments.size());
+		
+		request.setAttribute("showCharts", true);
+		
+		return "paymentsList";
+	}	
+	
+	
 }

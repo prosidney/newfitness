@@ -4,11 +4,58 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <layout:page title="New Fitness" description="Home" keywords="amazing, app, New Fitness" user="Admin">
+    <jsp:attribute name="extraHeader">
+		<script type="text/javascript">
+			var showCharts = '${requestScope.showCharts}';
+		    
+		    if(showCharts){ 
+				// Load the Visualization API and the piechart package.
+			    google.load('visualization', '1.0', {'packages':['corechart']});
+		
+			    // Set a callback to run when the Google Visualization API is loaded.
+			    google.setOnLoadCallback(drawChart);
+			    
+			    // Callback that creates and populates a data table,
+			    // instantiates the pie chart, passes in the data and
+			    // draws it.
+			    function drawChart() {
+			    	
+			    	var qtPaid = '${requestScope.qtPaid}';
+			    	var qtPendent = '${requestScope.qtPendent}';
+			    	
+					//window.alert(qtPaid + ', ' + qtPendent);			    	
+			    	
+			        // Create the data table.
+			        var data = new google.visualization.DataTable();
+			        data.addColumn('string', 'Topping');
+			        data.addColumn('number', 'Slices');
+			        data.addRows([
+			          ['Pagos', parseInt(qtPaid)],
+			          ['Pendentes', parseInt(qtPendent)]
+			        ]);
+		
+			        // Set chart options
+			        var options = {'title':'Quantidade de parcelas pagas',
+			                       'width':400,
+			                       'height':300};
+		
+			        // Instantiate and draw our chart, passing in some options.
+			        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+			        chart.draw(data, options);
+			    }		
+		    }
+		 </script>
+    </jsp:attribute>
     <jsp:body>
         <center>
+			<!--Div that will hold the pie chart-->
+			<c:if test="${showCharts}">
+   				<div id="chart_div" > </div>  
+			</c:if>
+    		     
 			<table class="table table-hover" style="width: 85%">
 				<tr>
-					<th colspan="6" style="text-align: center;"><c:out value="Pagamentos" /></th>
+					<th colspan="6" style="text-align: center;"><c:out value="Detalhes" /></th>
 				</tr>
 				<tr>
 					<th style="width: 40%"><c:out value="Nome" /></th>

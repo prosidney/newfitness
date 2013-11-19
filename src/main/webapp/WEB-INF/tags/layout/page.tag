@@ -43,6 +43,9 @@
         <script type="text/javascript" src="/js/jquery-1.9.1.js"></script>
         <script type="text/javascript" src="/js/jquery-ui-1.10.3.custom.js"></script>
         
+        <!--Load the AJAX API-->
+    	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        
         <script type="text/javascript">
 			function enforceNumericValue(obj){  
 				 //  check for valid numeric strings	

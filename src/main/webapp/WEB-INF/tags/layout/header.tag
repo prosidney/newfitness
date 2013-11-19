@@ -25,7 +25,7 @@
 							<li class="nav-header">Administração</li>
 							<li><a href="<c:url value="/pages/admin"/>">Alunos</a></li>
 							<li><a href="<c:url value="/pages/gym"/>">Academia</a></li>
-							<li><a href="<c:url value="/pages/paymentsReport"/>">Relatórios de pagamento</a></li>
+							<li><a href="<c:url value="/pages/paymentsReport.do"/>">Relatórios de pagamento</a></li>
 							<li class="divider"></li>
 						</ul></li>
 				</ul>

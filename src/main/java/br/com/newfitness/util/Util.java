@@ -16,6 +16,7 @@ import br.com.newfitness.dao.impl.PaymentDao;
 import br.com.newfitness.exception.BusinessException;
 import br.com.newfitness.model.Aluno;
 import br.com.newfitness.model.Aluno.Status;
+import br.com.newfitness.model.Genre;
 import br.com.newfitness.model.Gym;
 import br.com.newfitness.model.Payment;
 import br.com.newfitness.model.PaymentType;
@@ -32,6 +33,16 @@ public class Util {
 	@Autowired
 	GymDao gymDao;
 	
+	public List<Aluno> fillStatusMembers(List<Aluno> members) {
+		List<Aluno> alunos = new ArrayList<Aluno>(members);
+		
+		for (Aluno aluno : alunos) {
+			aluno.setStatus(retrieveStatusMember(aluno.getMatricula()));
+		}
+		
+		return alunos;
+	}
+	
 	public Status retrieveStatusMember(int mat) {
 		if(paymentDao.findPendentPayments(mat).size() == 0){
 			return Status.OK;
@@ -40,14 +51,14 @@ public class Util {
 		return Status.NOK;
 	}
 
-	public List<Payment> generatePayments(Aluno member) throws BusinessException{
-		GregorianCalendar today = createGregorian(new Date());
+	public List<Payment> generatePayments(Aluno member, Date dateReference) throws BusinessException{
+		GregorianCalendar today = createGregorian(dateReference);
 		
 		List<Payment> payments = new ArrayList<Payment>();
 		
 		Integer dueDate = member.getDiaVencimentoParcela();
 		
-		GregorianCalendar gregorianCount = createGregorian(new Date());
+		GregorianCalendar gregorianCount = createGregorian(dateReference);
 		gregorianCount.set(Calendar.DAY_OF_MONTH, dueDate);
 		gregorianCount.set(Calendar.HOUR_OF_DAY, 0);
 		gregorianCount.set(Calendar.MINUTE, 0);
@@ -58,25 +69,20 @@ public class Util {
 			gregorianCount.add(Calendar.MONTH, 1);
 		} 
 		
-		Payment init = new Payment();
-		
 		List<Gym> gym = gymDao.findAll();
-		
 		if(gym.size() == 0){
 			throw new BusinessException("Necessário entrar na tela de administração da academia para realizar os cadastros básicos");
 		}
-		
 		BigDecimal amount = gym.get(0).getAmount();
 		
+		Payment firstPayment = new Payment();
 		
-		init.setAmount(amount);
-		init.setAluno(member);
-		init.setDtPayment(null);
-		init.setPaymentType(PaymentType.DI);
-		init.setExpirationDate(gregorianCount.getTime());
-		
-		payments.add(init);
-		
+		firstPayment.setAmount(amount);
+		firstPayment.setAluno(member);
+		firstPayment.setDtPayment(null);
+		firstPayment.setPaymentType(PaymentType.DI);
+		firstPayment.setExpirationDate(gregorianCount.getTime());
+		payments.add(firstPayment);
 		
 		gregorianCount.add(Calendar.MONTH, 1);
 		while (gregorianCount.get(Calendar.YEAR) == today.get(Calendar.YEAR)) {

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -83,7 +84,7 @@ public class UtilTest {
 		member.setMatricula(1);
 		member.setDiaVencimentoParcela(20);
 		
-		List<Payment> payments = util.generatePayments(member);
+		List<Payment> payments = util.generatePayments(member, new Date());
 		
 		GregorianCalendar gc = new GregorianCalendar();
 		
@@ -94,7 +95,8 @@ public class UtilTest {
 /*		System.out.println(months.getMonths());
 		for (Payment payment : payments) {
 			System.out.println(payment);
-		}		*/
+		}
+		*/
 		
 		assertTrue(payments.size() == months.getMonths());
 	}	

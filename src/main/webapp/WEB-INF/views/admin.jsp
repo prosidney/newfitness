@@ -50,7 +50,7 @@
 				</tr>
 				<c:forEach var="aluno" items="${alunos}">
 					<c:choose>
-						<c:when test="${aluno.status.sigla == 'ED'}">
+						<c:when test="${aluno.status.sigla == 'OK'}">
 						  	<tr class="success">
 						</c:when>
 						<c:otherwise>

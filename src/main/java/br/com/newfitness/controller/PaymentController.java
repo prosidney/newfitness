@@ -57,7 +57,6 @@ public class PaymentController {
 			client = clientDao.findByMatricula(Integer.parseInt(matId));
 		}
 		
-		client.getPayments().size();
 		request.setAttribute("payments", client.getPayments());
 		request.setAttribute("mat", client.getMatricula());
 		

@@ -1,6 +1,8 @@
 package br.com.newfitness.controller;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import br.com.newfitness.dao.impl.AlunoDao;
 import br.com.newfitness.dao.impl.PaymentDao;
-import br.com.newfitness.exception.BusinessException;
 import br.com.newfitness.model.Aluno;
 import br.com.newfitness.util.Util;
 
@@ -61,32 +62,38 @@ public class ClientController {
 		}
 		
 		try{
-			if(aluno.getMatricula() == null){
+			/*if(aluno.getMatricula() == null){*/
 				aluno.setRegisterDate(new Date());
-				aluno.setPayments(util.generatePayments(aluno));
-			}
+				/*aluno.setPayments(util.generatePayments(aluno, new Date()));*/
+				
+				GregorianCalendar gc = new GregorianCalendar();
+				gc.set(Calendar.DAY_OF_MONTH, 1);
+				gc.set(Calendar.MONTH, 0);
+				gc.set(Calendar.YEAR, 2013);
+				
+				aluno.setPayments(util.generatePayments(aluno, gc.getTime()));
+				
+			/*}*/
 			clientDao.save(aluno);
-			/*paymentDao.save(aluno.getPayments());*/
 			
-			request.setAttribute("alunos", clientDao.findAll());
+			List<Aluno> all = clientDao.findAll();
+			request.setAttribute("alunos", all);
+			request.setAttribute("qtde", all.size());
 			
-		} catch (BusinessException be){
-			request.setAttribute("errorMessage", be.getLocalizedMessage());
-			
-			return "clientAdd";
 		} catch (Exception e){
 			request.setAttribute("errorMessage", e.getLocalizedMessage());
 			
 			return "clientAdd";
 		}
-			
+		
 		return "admin";
 	}
 	
 	@Transactional(readOnly=true)
 	@RequestMapping(value="/findClient.do", method=RequestMethod.POST)
-	public String findClients(HttpServletRequest request, HttpServletResponse response, Model model){
+	public String findClients(HttpServletRequest request){
 		List<Aluno> members = clientDao.find(request.getParameter("name"));
+		members = util.fillStatusMembers(members);
 		
 		request.setAttribute("alunos", members);
 		request.setAttribute("qtde", members.size());

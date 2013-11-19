@@ -1,7 +1,10 @@
 package br.com.newfitness.dao.impl;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,24 +13,55 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.newfitness.exception.BusinessException;
 import br.com.newfitness.model.Aluno;
+import br.com.newfitness.model.Payment;
+import br.com.newfitness.util.Util;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:springconfiguration-test.xml"})
-@TransactionConfiguration(transactionManager="transactionManager",defaultRollback=true)
+@TransactionConfiguration(transactionManager="transactionManager",defaultRollback=false)
 @Transactional
 public class AlunoDaoTest {
 
 	@Autowired
 	AlunoDao alunoDao;
 	
+	@Autowired
+	PaymentDao paymentDao;
+	
+	@Autowired
+	Util util;
+	
 	@Test
-	public void test() {
-		List<Aluno> all = alunoDao.findAll();
+	public void test() throws BusinessException {
+		Aluno aluno = alunoDao.findByMatricula(1);
 		
-		for (Aluno aluno : all) {
-			System.out.println(aluno.getNome());
+		GregorianCalendar gc = new GregorianCalendar();
+		gc.set(Calendar.DAY_OF_MONTH, 1);
+		gc.set(Calendar.MONTH, 0);
+		gc.set(Calendar.YEAR, 2013);
+		
+		aluno.setPayments(util.generatePayments(aluno, gc.getTime()));
+		
+		paymentDao.save(aluno.getPayments());
+		for (Payment pay : aluno.getPayments()) {
+			System.out.println(pay);
 		}
+		
+		alunoDao.save(aluno);
+	}
+	
+	@Test
+	public void test1() throws BusinessException {
+		Aluno aluno = alunoDao.findByMatricula(1);
+		
+		System.out.println(aluno.getPayments().size());
+		for (Payment pay : aluno.getPayments()) {
+			System.out.println(pay);
+		}
+		
+		alunoDao.save(aluno);
 	}
 
 }

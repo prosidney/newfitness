@@ -222,7 +222,7 @@ public class Aluno implements Serializable {
 
 	public enum Status {
 
-		OK("Vencida"), NOK("Em dia");
+		OK("Em dia"), NOK("Vencida");
 
 		private String desc;	
 		

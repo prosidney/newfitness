@@ -52,7 +52,18 @@
 			<c:if test="${showCharts}">
    				<div id="chart_div" > </div>  
 			</c:if>
-    		     
+        	<form method="post" action="viewPaymentsByMemberName.do">
+        		<table class="table" style="width: 30%">
+        			<tr>
+        				<td colspan="3"><center> <c:out value="Buscar" /> </center></td>
+        			</tr>
+	        		<tr>	
+						<td><c:out value="Nome" /></td>
+						<td><input type="text" name="name"/></td>
+						<td> <a class="btn" href="#" onclick="document.forms[0].submit()"><i class="icon-search icon-black"></i> Buscar </a> </td>
+					</tr>
+        		</table>
+        	</form>    		     
 			<table class="table table-hover" style="width: 85%">
 				<tr>
 					<th colspan="6" style="text-align: center;"><c:out value="Detalhes" /></th>
@@ -111,7 +122,6 @@
 					</th>
 				</tr>
 			</table>
-			<a class="btn" href="<c:url value="addPayment.do?mat=${mat}"/>"><i class="icon-plus-sign icon-black"></i> Novo Pagamento </a>
 			<a class="btn" href="admin"><i class="icon-backward icon-black"></i> Voltar </a>
 		</center>        
     </jsp:body>

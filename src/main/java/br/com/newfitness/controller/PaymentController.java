@@ -48,17 +48,20 @@ public class PaymentController {
 	GymDao gymDao;
 	
 	@Transactional(readOnly=true)
-	@RequestMapping(value="/viewPayments.do", method=RequestMethod.GET)
+	@RequestMapping(value="/viewPaymentsByMat.do", method=RequestMethod.GET)
 	public String showClientPayments(HttpServletRequest request, HttpServletResponse response){
-		Aluno client = new Aluno();
-		
 		String matId = request.getParameter("mat");
 		if(matId != null && StringUtils.isNotEmpty(matId) && StringUtils.isAlphanumeric(matId)){
-			client = clientDao.findByMatricula(Integer.parseInt(matId));
+			List<Payment> allPaidPayments = paymentDao.findAllPaidPaymentsByMatId(Integer.valueOf(matId));
+			List<Payment> allPendentPayments = paymentDao.findAllPendentPaymentsByMatId(Integer.valueOf(matId));
+			List<Payment> all = unionPayments(allPaidPayments, allPendentPayments);
+			
+			request.setAttribute("payments", all);
+			request.setAttribute("qtPendent", allPendentPayments.size());
+			request.setAttribute("qtPaid", allPaidPayments.size());
+			request.setAttribute("showCharts", true);
 		}
 		
-		request.setAttribute("payments", client.getPayments());
-		request.setAttribute("mat", client.getMatricula());
 		
 		return "paymentsList";
 	}
@@ -99,14 +102,6 @@ public class PaymentController {
 		return "paymentAdd";
 	}
 
-	private Map<String, String> generateTypes() {
-		Map<String,String> payTypes = new LinkedHashMap<String,String>();
-		payTypes.put("DI", "Dinheiro");
-		payTypes.put("CA", "Cart√£o");
-		payTypes.put("CH", "Cheque");
-		return payTypes;
-	}
-	
 	@Transactional
 	@RequestMapping(value="/savePayment.do", method={RequestMethod.GET,RequestMethod.POST})
 	public String paymentSave(@ModelAttribute("payment") @Valid Payment pay, 
@@ -133,9 +128,33 @@ public class PaymentController {
 	public String showAllPayments(HttpServletRequest request, HttpServletResponse response){
 		List<Payment> allPaidPayments = paymentDao.findAllPaidPayments();
 		List<Payment> allPendentPayments = paymentDao.findAllPendentPayments();
+		List<Payment> all = unionPayments(allPaidPayments, allPendentPayments);
 		
+		request.setAttribute("payments", all);
+		request.setAttribute("qtPendent", allPendentPayments.size());
+		request.setAttribute("qtPaid", allPaidPayments.size());
+		request.setAttribute("showCharts", true);
+		
+		return "paymentsList";
+	}	
+	
+	@Transactional(readOnly=true)
+	@RequestMapping(value="/viewPaymentsByMemberName.do", method=RequestMethod.POST)
+	public String findPaymentsByClientName(HttpServletRequest request){
+		List<Payment> allPaidPayments = paymentDao.findAllPaidPaymentsByClientName(request.getParameter("name"));
+		List<Payment> allPendentPayments = paymentDao.findAllPendentPayments(request.getParameter("name"));
+		List<Payment> all = unionPayments(allPaidPayments, allPendentPayments);
+		
+		request.setAttribute("payments", all);
+		request.setAttribute("qtPendent", allPendentPayments.size());
+		request.setAttribute("qtPaid", allPaidPayments.size());
+		request.setAttribute("showCharts", true);
+		
+		return "paymentsList";
+	}
+
+	private List<Payment> unionPayments(List<Payment> allPaidPayments, List<Payment> allPendentPayments) {
 		List<Payment> all = new ArrayList<Payment>();
-		
 		all.addAll(allPendentPayments);
 		all.addAll(allPaidPayments);
 		
@@ -143,14 +162,16 @@ public class PaymentController {
 			Collections.sort(all);
 		}
 		
-		request.setAttribute("payments", all);
-		request.setAttribute("qtPendent", allPendentPayments.size());
-		request.setAttribute("qtPaid", allPaidPayments.size());
-		
-		request.setAttribute("showCharts", true);
-		
-		return "paymentsList";
+		return all;
 	}	
 	
+	private Map<String, String> generateTypes() {
+		Map<String,String> payTypes = new LinkedHashMap<String,String>();
+		payTypes.put("DI", "Dinheiro");
+		payTypes.put("CA", "Cart„o");
+		payTypes.put("CH", "Cheque");
+		
+		return payTypes;
+	}
 	
 }

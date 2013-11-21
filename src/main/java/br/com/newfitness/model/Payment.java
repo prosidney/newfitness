@@ -44,6 +44,8 @@ public class Payment implements Serializable, Comparable<Payment> {
 	@JoinColumn(name="ALUNO_ID")
 	private Aluno aluno;
 	
+	private String observation;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -92,6 +94,14 @@ public class Payment implements Serializable, Comparable<Payment> {
 		this.aluno = aluno;
 	}
 
+	public String getObservation() {
+		return observation;
+	}
+
+	public void setObservation(String observation) {
+		this.observation = observation;
+	}
+
 	public int compareTo(Payment other) {
 		if(other.getExpirationDate() != null){
 			return other.getExpirationDate().compareTo(expirationDate);
@@ -104,6 +114,7 @@ public class Payment implements Serializable, Comparable<Payment> {
 	public String toString() {
 		return "Payment [amount=" + amount + ", expirationDate="
 				+ expirationDate + ", dtPayment=" + dtPayment
-				+ ", paymentType=" + paymentType + "]";
+				+ ", paymentType=" + paymentType + ", aluno=" + aluno
+				+ ", observation=" + observation + "]";
 	}
 }

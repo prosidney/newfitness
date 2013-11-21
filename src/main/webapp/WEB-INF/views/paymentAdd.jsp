@@ -52,10 +52,15 @@
 						<td><form:errors path="paymentType" cssClass="error" /></td>
 					</tr>
 					<tr>
+						<td>Observação:</td>
+						<td><form:textarea path="observation"/></td>
+						<td><form:errors path="observation" cssClass="error" /></td>
+					</tr>
+					<tr>
 						<td colspan="2">
 						<center>
 							<a class="btn" href="#" onclick="document.forms[0].submit()"><i class="icon-ok icon-black"></i> Salvar </a>
-							<a class="btn" href="<c:url value="viewPayments.do?mat=${payment.aluno.matricula}"/>"><i class="icon-backward icon-black"></i> Voltar </a>
+							<a class="btn" href="<c:url value="viewPaymentsByMat.do?mat=${payment.aluno.matricula}"/>"><i class="icon-backward icon-black"></i> Voltar </a>
 						</center>
 						</td>
 					</tr>				

@@ -61,4 +61,52 @@ public class PaymentDao extends AbstractDao<Payment> implements GenericDao<Payme
 		
 		return sessionFactory.getCurrentSession().createQuery(hql.toString()).list();
 	}
+
+	public List<Payment> findAllPaidPaymentsByClientName(String name) {
+		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
+								.append("pm.expirationDate < sysdate ")
+								.append("AND pm.dtPayment != null ")
+								.append("AND upper(pm.aluno.nome) like upper(:name) ");
+		
+		Query query = sessionFactory.getCurrentSession().createQuery(hql.toString());
+		query.setParameter("name", "%" + name + "%");
+		
+		return query.list();
+	}
+
+	public List<Payment> findAllPendentPayments(String name) {
+		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
+								.append("pm.expirationDate < sysdate ")
+								.append("AND pm.dtPayment = null ")
+								.append("AND upper(pm.aluno.nome) like upper(:name) ");
+		
+		Query query = sessionFactory.getCurrentSession().createQuery(hql.toString());
+		query.setParameter("name", "%" + name + "%");
+		
+		return query.list();
+	}
+
+	public List<Payment> findAllPaidPaymentsByMatId(Integer matId) {
+		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
+											.append("pm.expirationDate < sysdate ")
+											.append("AND pm.dtPayment != null ")
+											.append("AND pm.aluno.matricula = :matId ");
+
+		Query query = sessionFactory.getCurrentSession().createQuery(hql.toString());
+		query.setParameter("matId", matId);
+		
+		return query.list();
+	}
+
+	public List<Payment> findAllPendentPaymentsByMatId(Integer matId) {
+		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
+												.append("pm.expirationDate < sysdate ")
+												.append("AND pm.dtPayment = null ")
+												.append("AND pm.aluno.matricula = :matId ");
+
+		Query query = sessionFactory.getCurrentSession().createQuery(hql.toString());
+		query.setParameter("matId", matId);
+		
+		return query.list();
+	}
 }

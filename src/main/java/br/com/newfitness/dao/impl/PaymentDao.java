@@ -35,7 +35,7 @@ public class PaymentDao extends AbstractDao<Payment> implements GenericDao<Payme
 	public List<Payment> findPendentPayments(Integer matricula) {
 		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
 								.append("pm.aluno.matricula = :mat ")
-								.append("AND pm.expirationDate < sysdate ")
+								.append("AND pm.expirationDate < current_date() ")
 								.append("AND pm.dtPayment = null ");
 		
 		Session session = sessionFactory.getCurrentSession();
@@ -48,7 +48,7 @@ public class PaymentDao extends AbstractDao<Payment> implements GenericDao<Payme
 	
 	public List<Payment> findAllPendentPayments() {
 		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
-									.append("pm.expirationDate < sysdate ")
+									.append("pm.expirationDate < current_date() ")
 									.append("AND pm.dtPayment = null ");
 		
 		return sessionFactory.getCurrentSession().createQuery(hql.toString()).list();
@@ -56,7 +56,7 @@ public class PaymentDao extends AbstractDao<Payment> implements GenericDao<Payme
 	
 	public List<Payment> findAllPaidPayments() {
 		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
-		.append("pm.expirationDate < sysdate ")
+		.append("pm.expirationDate < current_date() ")
 		.append("AND pm.dtPayment != null ");
 		
 		return sessionFactory.getCurrentSession().createQuery(hql.toString()).list();
@@ -64,7 +64,7 @@ public class PaymentDao extends AbstractDao<Payment> implements GenericDao<Payme
 
 	public List<Payment> findAllPaidPaymentsByClientName(String name) {
 		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
-								.append("pm.expirationDate < sysdate ")
+								.append("pm.expirationDate < current_date() ")
 								.append("AND pm.dtPayment != null ")
 								.append("AND upper(pm.aluno.nome) like upper(:name) ");
 		
@@ -76,7 +76,7 @@ public class PaymentDao extends AbstractDao<Payment> implements GenericDao<Payme
 
 	public List<Payment> findAllPendentPayments(String name) {
 		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
-								.append("pm.expirationDate < sysdate ")
+								.append("pm.expirationDate < current_date() ")
 								.append("AND pm.dtPayment = null ")
 								.append("AND upper(pm.aluno.nome) like upper(:name) ");
 		
@@ -88,7 +88,7 @@ public class PaymentDao extends AbstractDao<Payment> implements GenericDao<Payme
 
 	public List<Payment> findAllPaidPaymentsByMatId(Integer matId) {
 		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
-											.append("pm.expirationDate < sysdate ")
+											.append("pm.expirationDate < current_date() ")
 											.append("AND pm.dtPayment != null ")
 											.append("AND pm.aluno.matricula = :matId ");
 
@@ -100,7 +100,7 @@ public class PaymentDao extends AbstractDao<Payment> implements GenericDao<Payme
 
 	public List<Payment> findAllPendentPaymentsByMatId(Integer matId) {
 		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
-												.append("pm.expirationDate < sysdate ")
+												.append("pm.expirationDate < current_date() ")
 												.append("AND pm.dtPayment = null ")
 												.append("AND pm.aluno.matricula = :matId ");
 

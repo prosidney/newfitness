@@ -43,7 +43,7 @@ public abstract class AbstractDao<T> implements GenericDao<T>{
 		return instance;		
 	}
 	
-	public List<T> save(List<T> instance){
+	public List<T> saveAll(List<T> instance){
 		log.info("inserindo dados na tabela " + typeClass.getName());
 		
 		for (T t : instance) {

@@ -47,11 +47,13 @@
 		 </script>
     </jsp:attribute>
     <jsp:body>
+    	<jsp:useBean id="now" class="java.util.Date" />
+		<fmt:formatDate var="year" value="${now}" pattern="yyyy" />
         <center>
 			<!--Div that will hold the pie chart-->
-			<c:if test="${showCharts}">
+			<c:if test="${showCharts}"> 
    				<div id="chart_div" > </div>  
-			</c:if>
+			</c:if> 
         	<form method="post" action="viewPaymentsByMemberName.do">
         		<table class="table" style="width: 30%">
         			<tr>
@@ -63,7 +65,26 @@
 						<td> <a class="btn" href="#" onclick="document.forms[0].submit()"><i class="icon-search icon-black"></i> Buscar </a> </td>
 					</tr>
         		</table>
-        	</form>    		     
+        	</form>
+        	<c:if test="${showGenerateYearPaymentsButton}">
+				<form method="post" action="generatePaymentsYear.do">
+	        		<table class="table" style="width: 30%">
+		        		<tr>	
+							<td><c:out value="Gerar pagamentos" /></td>
+							<td>
+								<select id="year" name="year">
+									<option value="${year}" label="${year}"/>
+									<option value="${year + 1}" label="${year + 1}" selected="selected"/>
+								</select>
+							</td>
+							<td><input type="hidden" name="mat" value="${mat}" /></td>
+							<td> 
+								<a class="btn" href="#" onclick="document.forms[1].submit()"> <i class="icon-search icon-black"></i> Gerar </a> 
+							</td>
+						</tr>
+	        		</table>
+	        	</form>
+			</c:if>    		     
 			<table class="table table-hover" style="width: 85%">
 				<tr>
 					<th colspan="6" style="text-align: center;"><c:out value="Detalhes" /></th>
@@ -74,7 +95,7 @@
 					<th style="width: 15%"><c:out value="Data do Vencimento" /></th>
 					<th style="width: 15%"><c:out value="Data do Pagamento" /></th>
 					<th style="width: 15%"><c:out value="Tipo de pagamento" /></th>
-					<th><c:out value="Ações" /></th>
+					<th><c:out value="AÃ§Ãµes" /></th>
 				</tr>
 				<c:set var="totalPaid" scope="request" value="${0}"/>
 				<c:set var="totalNotPaid" scope="request" value="${0}"/>

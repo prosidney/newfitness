@@ -30,6 +30,7 @@ import br.com.newfitness.dao.impl.PaymentDao;
 import br.com.newfitness.model.Aluno;
 import br.com.newfitness.model.Gym;
 import br.com.newfitness.model.Payment;
+import br.com.newfitness.util.Util;
 
 
 @Controller
@@ -47,19 +48,20 @@ public class PaymentController {
 	@Autowired
 	GymDao gymDao;
 	
+	@Autowired
+	Util util;
+	
 	@Transactional(readOnly=true)
 	@RequestMapping(value="/viewPaymentsByMat.do", method=RequestMethod.GET)
 	public String showClientPayments(HttpServletRequest request, HttpServletResponse response){
 		String matId = request.getParameter("mat");
 		if(matId != null && StringUtils.isNotEmpty(matId) && StringUtils.isAlphanumeric(matId)){
-			List<Payment> allPaidPayments = paymentDao.findAllPaidPaymentsByMatId(Integer.valueOf(matId));
-			List<Payment> allPendentPayments = paymentDao.findAllPendentPaymentsByMatId(Integer.valueOf(matId));
-			List<Payment> all = unionPayments(allPaidPayments, allPendentPayments);
+			List<Payment> all = paymentDao.findAllPaymentsByMat(Integer.parseInt(matId));
 			
 			request.setAttribute("payments", all);
-			request.setAttribute("qtPendent", allPendentPayments.size());
-			request.setAttribute("qtPaid", allPaidPayments.size());
-			request.setAttribute("showCharts", true);
+			
+			request.setAttribute("mat", matId);
+			request.setAttribute("showGenerateYearPaymentsButton", true);
 		}
 		
 		
@@ -72,7 +74,7 @@ public class PaymentController {
 		List<Gym> findAll = gymDao.findAll();
 		
 		if(findAll.size() == 0){
-			request.setAttribute("errorMessage", "Necessário entrar na tela de administração da academia para realizar os cadastros básicos");
+			request.setAttribute("errorMessage", "Necessï¿½rio entrar na tela de administraï¿½ï¿½o da academia para realizar os cadastros bï¿½sicos");
 			return "admin";
 		}
 		
@@ -123,6 +125,40 @@ public class PaymentController {
 		return "paymentsList";
 	}
 	
+	@Transactional
+	@RequestMapping(value="/generatePaymentsYear.do", method=RequestMethod.POST)
+	public String generatePaymentsYear(HttpServletRequest request) throws Exception{
+		//TODO verificar se o aluno nao tem nenhum pagamento para o ano solicitado, caso possua nao deixar fazer.
+		if(request.getParameter("mat") != null){
+			String matId = (String) request.getParameter("mat");
+			String year = (String) request.getParameter("year");
+			
+			Aluno aluno = clientDao.findByMatricula(Integer.parseInt(matId));
+			
+			GregorianCalendar gc = new GregorianCalendar();
+			gc.set(Calendar.DAY_OF_MONTH, 1);
+			gc.set(Calendar.MONTH, 0);
+			gc.set(Calendar.YEAR, Integer.parseInt(year));
+			
+			List<Payment> newPayments = util.generatePayments(aluno, gc.getTime());
+			paymentDao.saveAll(newPayments);
+			aluno.getPayments().addAll(newPayments);
+			
+			List<Payment> allPaidPayments = paymentDao.findAllPaidPaymentsByMatId(Integer.valueOf(matId));
+			List<Payment> allPendentPayments = paymentDao.findAllPendentPaymentsByMatId(Integer.valueOf(matId));
+			List<Payment> all = unionPayments(allPaidPayments, allPendentPayments);
+			
+			request.setAttribute("payments", all);
+			request.setAttribute("qtPendent", allPendentPayments.size());
+			request.setAttribute("qtPaid", allPaidPayments.size());
+			
+			request.setAttribute("mat", matId);
+			request.setAttribute("showGenerateYearPaymentsButton", true);
+		} 
+		
+		return "paymentsList";
+	}
+	
 	@Transactional(readOnly=true)
 	@RequestMapping(value="/paymentsReport.do", method=RequestMethod.GET)
 	public String showAllPayments(HttpServletRequest request, HttpServletResponse response){
@@ -141,14 +177,10 @@ public class PaymentController {
 	@Transactional(readOnly=true)
 	@RequestMapping(value="/viewPaymentsByMemberName.do", method=RequestMethod.POST)
 	public String findPaymentsByClientName(HttpServletRequest request){
-		List<Payment> allPaidPayments = paymentDao.findAllPaidPaymentsByClientName(request.getParameter("name"));
-		List<Payment> allPendentPayments = paymentDao.findAllPendentPayments(request.getParameter("name"));
-		List<Payment> all = unionPayments(allPaidPayments, allPendentPayments);
+		List<Payment> all = paymentDao.findAllPaymentsByClientName(request.getParameter("name"));
 		
 		request.setAttribute("payments", all);
-		request.setAttribute("qtPendent", allPendentPayments.size());
-		request.setAttribute("qtPaid", allPaidPayments.size());
-		request.setAttribute("showCharts", true);
+		/*request.setAttribute("showCharts", true);*/	
 		
 		return "paymentsList";
 	}
@@ -168,7 +200,7 @@ public class PaymentController {
 	private Map<String, String> generateTypes() {
 		Map<String,String> payTypes = new LinkedHashMap<String,String>();
 		payTypes.put("DI", "Dinheiro");
-		payTypes.put("CA", "Cartão");
+		payTypes.put("CA", "Cartï¿½o");
 		payTypes.put("CH", "Cheque");
 		
 		return payTypes;

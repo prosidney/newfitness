@@ -73,6 +73,16 @@ public class PaymentDao extends AbstractDao<Payment> implements GenericDao<Payme
 		
 		return query.list();
 	}
+	
+	public List<Payment> findAllPaymentsByClientName(String name) {
+		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
+		.append(" upper(pm.aluno.nome) like upper(:name) ");
+		
+		Query query = sessionFactory.getCurrentSession().createQuery(hql.toString());
+		query.setParameter("name", "%" + name + "%");
+		
+		return query.list();
+	}
 
 	public List<Payment> findAllPendentPayments(String name) {
 		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
@@ -107,6 +117,16 @@ public class PaymentDao extends AbstractDao<Payment> implements GenericDao<Payme
 		Query query = sessionFactory.getCurrentSession().createQuery(hql.toString());
 		query.setParameter("matId", matId);
 		
+		return query.list();
+	}
+
+	public List<Payment> findAllPaymentsByMat(int matId) {
+		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
+		.append(" pm.aluno.matricula = :matId ");
+
+		Query query = sessionFactory.getCurrentSession().createQuery(hql.toString());
+		query.setParameter("matId", matId);
+
 		return query.list();
 	}
 }

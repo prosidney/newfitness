@@ -60,7 +60,7 @@ public class AlunoDaoTest {
 		
 		aluno.setPayments(util.generatePayments(aluno, gc.getTime()));
 		
-		paymentDao.save(aluno.getPayments());
+		paymentDao.saveAll(aluno.getPayments());
 		for (Payment pay : aluno.getPayments()) {
 			System.out.println(pay);
 		}

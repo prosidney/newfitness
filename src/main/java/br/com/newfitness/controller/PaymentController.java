@@ -36,6 +36,8 @@ import br.com.newfitness.util.Util;
 @Controller
 public class PaymentController {
 	
+	private static final int FIVE = 5;
+
 	@Autowired
 	AlunoDao clientDao;
 	
@@ -55,11 +57,24 @@ public class PaymentController {
 	@RequestMapping(value="/viewPaymentsByMat.do", method=RequestMethod.GET)
 	public String showClientPayments(HttpServletRequest request, HttpServletResponse response){
 		String matId = request.getParameter("mat");
+		String currPage = request.getParameter("page");
+		
 		if(matId != null && StringUtils.isNotEmpty(matId) && StringUtils.isAlphanumeric(matId)){
-			List<Payment> all = paymentDao.findAllPaymentsByMat(Integer.parseInt(matId));
+			List<Payment> all = new ArrayList<Payment>();
+			int size = 0;
+			if(StringUtils.isEmpty(currPage)){
+				all = paymentDao.findAllPaymentsByMat(Integer.parseInt(matId));
+				size = all.size();
+			} else {
+				all = paymentDao.findAllPaymentsByMat(Integer.parseInt(matId), Integer.parseInt(currPage) , FIVE);
+				size = paymentDao.findAllPaymentsByMatCount(Integer.parseInt(matId)).intValue();
+			}
 			
 			request.setAttribute("payments", all);
 			request.setAttribute("mat", matId);
+			request.setAttribute("totalItens", size);
+			request.setAttribute("itensPerPage", FIVE);
+			request.setAttribute("currentPage", currPage);
 		}
 		
 		return "paymentsList";
@@ -115,10 +130,10 @@ public class PaymentController {
 		pay.setAluno(aluno);
 		paymentDao.save(pay);
 			
-		aluno.getPayments().size();
 		request.setAttribute("payments", aluno.getPayments());
 		request.setAttribute("mat", aluno.getMatricula());
-			
+		request.setAttribute("totalItens", aluno.getPayments().size());
+		
 		return "paymentsList";
 	}
 	

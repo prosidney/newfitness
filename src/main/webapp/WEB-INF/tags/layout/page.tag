@@ -45,6 +45,9 @@
         
         <!--Load the AJAX API-->
     	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+		<script type="text/javascript" src="/js/simplePagination.js"></script>
+		<link type="text/css" rel="stylesheet" href="/css/simplePagination.css"/>
         
         <script type="text/javascript">
 			function enforceNumericValue(obj){  
@@ -110,6 +113,7 @@
 	    <script src="/js/bootstrap-collapse.js"></script>
 	    <script src="/js/bootstrap-carousel.js"></script>
 	    <script src="/js/bootstrap-typeahead.js"></script>
+		<script src="/js/simplePagination.js"></script>
     </body>
 </html>
 

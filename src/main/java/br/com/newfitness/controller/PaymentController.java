@@ -59,11 +59,8 @@ public class PaymentController {
 			List<Payment> all = paymentDao.findAllPaymentsByMat(Integer.parseInt(matId));
 			
 			request.setAttribute("payments", all);
-			
 			request.setAttribute("mat", matId);
-			request.setAttribute("showGenerateYearPaymentsButton", true);
 		}
-		
 		
 		return "paymentsList";
 	}
@@ -74,7 +71,7 @@ public class PaymentController {
 		List<Gym> findAll = gymDao.findAll();
 		
 		if(findAll.size() == 0){
-			request.setAttribute("errorMessage", "Necess�rio entrar na tela de administra��o da academia para realizar os cadastros b�sicos");
+			request.setAttribute("errorMessage", "Necessário entrar na tela de administração da academia para realizar os cadastros básicos");
 			return "admin";
 		}
 		
@@ -153,7 +150,6 @@ public class PaymentController {
 			request.setAttribute("qtPaid", allPaidPayments.size());
 			
 			request.setAttribute("mat", matId);
-			request.setAttribute("showGenerateYearPaymentsButton", true);
 		} 
 		
 		return "paymentsList";
@@ -169,22 +165,34 @@ public class PaymentController {
 		request.setAttribute("payments", all);
 		request.setAttribute("qtPendent", allPendentPayments.size());
 		request.setAttribute("qtPaid", allPaidPayments.size());
-		request.setAttribute("showCharts", true);
 		
-		return "paymentsList";
+		return "paymentReports";
 	}	
 	
 	@Transactional(readOnly=true)
-	@RequestMapping(value="/viewPaymentsByMemberName.do", method=RequestMethod.POST)
+	@RequestMapping(value={"/viewPaymentsByMemberName.do"}, method=RequestMethod.POST)
 	public String findPaymentsByClientName(HttpServletRequest request){
-		List<Payment> all = paymentDao.findAllPaymentsByClientName(request.getParameter("name"));
-		
-		request.setAttribute("payments", all);
-		/*request.setAttribute("showCharts", true);*/	
+		request.setAttribute("payments", paymentDao.findAllPaymentsByClientName(request.getParameter("name")));
 		
 		return "paymentsList";
 	}
-
+	
+	@Transactional(readOnly=true)
+	@RequestMapping(value="/viewPaymentsReportByMemberName.do", method=RequestMethod.POST)
+	public String findPaymentsByClientNameReport(HttpServletRequest request){
+		String clientName = request.getParameter("name");
+		
+		List<Payment> allPaidPayments = paymentDao.findAllPaidPaymentsByClientName(clientName);
+		List<Payment> allPendentPayments = paymentDao.findAllPendentPayments(request.getParameter("name"));
+		List<Payment> all = unionPayments(allPaidPayments, allPendentPayments);
+		
+		request.setAttribute("payments", all);
+		request.setAttribute("qtPendent", allPendentPayments.size());
+		request.setAttribute("qtPaid", allPaidPayments.size());
+		
+		return "paymentReports";
+	}
+	
 	private List<Payment> unionPayments(List<Payment> allPaidPayments, List<Payment> allPendentPayments) {
 		List<Payment> all = new ArrayList<Payment>();
 		all.addAll(allPendentPayments);

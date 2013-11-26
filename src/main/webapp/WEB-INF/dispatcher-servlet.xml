@@ -19,7 +19,6 @@
 
 	<context:component-scan base-package="br.com.newfitness" />
 	
-	
 	<bean id="authenticationSuccessHandler" class="br.com.newfitness.authenticator.CustomAuthenticationSuccessHandler">
 	  <property name="defaultTargetUrl" value="/pages/admin"/>
 	</bean>	

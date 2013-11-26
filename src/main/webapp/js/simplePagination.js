@@ -138,11 +138,16 @@
 				i,
 				tagName;
 
+			//var content = this.html();
+			
 			methods.destroy.call(this);
 			
 			tagName = (typeof this.prop === 'function') ? this.prop('tagName') : this.attr('tagName');
 
 			var $panel = tagName === 'UL' ? this : $('<ul></ul>').appendTo(this);
+			
+			//Generate the content of div
+			//$panel.append(content);
 
 			// Generate Prev link
 			if (o.prevText) {
@@ -183,7 +188,7 @@
 			// Generate Next link
 			if (o.nextText) {
 				methods._appendItem.call(this, o.currentPage + 1, {text: o.nextText, classes: 'next'});
-			}
+			}		
 		},
 
 		_getPages: function(o) {

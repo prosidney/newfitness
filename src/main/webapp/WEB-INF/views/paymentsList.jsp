@@ -11,9 +11,6 @@
 		    	var itensPerPage = '${itensPerPage}';
 		    	var currPage = '${currentPage}';
 		    	
-		        //var currentUrl = window.location.href;
-		    	//window.alert(currentUrl);
-		    	
 		    	var loc = window.location;
 		        var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);		        
 		        var absolutePath = loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
@@ -44,7 +41,7 @@
 		<fmt:formatDate var="year" value="${now}" pattern="yyyy" />
         <center>
 			<form method="post" action="generatePaymentsYear.do">
-        		<table class="table" style="width: 30%">
+        		<table class="table" style="width: 36%">
 	        		<tr>	
 						<td><c:out value="Gerar pagamentos" /></td>
 						<td>
@@ -123,6 +120,21 @@
 				</tbody>
 			</table>
 			<div id="light-pagination"> </div>
+			<form method="get" action="viewPaymentsByMat.do">
+				<table class="table" style="width: 8%">
+	        		<tr>	
+						<td>
+							<input type="hidden" name="mat" value="${mat}" />
+							<input type="text" name="itensPerPage" value="${itensPerPage}" style="width: 24px; height: 17px;" />
+							<input type="hidden" name="page" value="${currentPage}" />
+						</td>
+						<td> 
+							<a class="btn" href="#" onclick="document.forms[1].submit()"> <i class="icon-ok icon-black"></i></a> 
+						</td>
+					</tr>
+       			</table>	
+        	</form>	
+        	</br>	
 			<a class="btn" href="admin"><i class="icon-backward icon-black"></i> Voltar </a>
 		</center>        
     </jsp:body>

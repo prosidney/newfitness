@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,8 @@ import br.com.newfitness.util.Util;
 @Controller
 public class PaymentController {
 	
-	private static final int FIVE = 5;
+	private static final Integer FIVE = 5;
+	private static final Integer ONE = 1;
 
 	@Autowired
 	AlunoDao clientDao;
@@ -58,23 +60,33 @@ public class PaymentController {
 	public String showClientPayments(HttpServletRequest request, HttpServletResponse response){
 		String matId = request.getParameter("mat");
 		String currPage = request.getParameter("page");
+		String itensPerPage = StringUtils.defaultIfEmpty(request.getParameter("itensPerPage"), FIVE.toString()) ;
 		
 		if(matId != null && StringUtils.isNotEmpty(matId) && StringUtils.isAlphanumeric(matId)){
 			List<Payment> all = new ArrayList<Payment>();
-			int size = 0;
+			Integer size = 0;
 			if(StringUtils.isEmpty(currPage)){
 				all = paymentDao.findAllPaymentsByMat(Integer.parseInt(matId));
 				size = all.size();
+				
+				itensPerPage = size.toString();
+				currPage = ONE.toString();
 			} else {
-				all = paymentDao.findAllPaymentsByMat(Integer.parseInt(matId), Integer.parseInt(currPage) , FIVE);
+				all = paymentDao.findAllPaymentsByMat(Integer.parseInt(matId), Integer.parseInt(currPage) , Integer.parseInt(itensPerPage));
 				size = paymentDao.findAllPaymentsByMatCount(Integer.parseInt(matId)).intValue();
 			}
 			
-			request.setAttribute("payments", all);
-			request.setAttribute("mat", matId);
-			request.setAttribute("totalItens", size);
-			request.setAttribute("itensPerPage", FIVE);
-			request.setAttribute("currentPage", currPage);
+			
+			HashMap<String, Object> valuesToRequest = new HashMap<String, Object>();
+			
+			valuesToRequest.put("payments", all);
+			valuesToRequest.put("mat", matId);
+			
+			valuesToRequest.put("totalItens", size);
+			valuesToRequest.put("itensPerPage", itensPerPage);
+			valuesToRequest.put("currentPage", currPage);
+			
+			putMapOnRequestAttribute(valuesToRequest, request);
 		}
 		
 		return "paymentsList";
@@ -86,7 +98,7 @@ public class PaymentController {
 		List<Gym> findAll = gymDao.findAll();
 		
 		if(findAll.size() == 0){
-			request.setAttribute("errorMessage", "Necess√°rio entrar na tela de administra√ß√£o da academia para realizar os cadastros b√°sicos");
+			request.setAttribute("errorMessage", "Necess·rio entrar na tela de administraÁ„o da academia para realizar os cadastros b√°sicos");
 			return "admin";
 		}
 		
@@ -159,7 +171,7 @@ public class PaymentController {
 			List<Payment> allPaidPayments = paymentDao.findAllPaidPaymentsByMatId(Integer.valueOf(matId));
 			List<Payment> allPendentPayments = paymentDao.findAllPendentPaymentsByMatId(Integer.valueOf(matId));
 			List<Payment> all = unionPayments(allPaidPayments, allPendentPayments);
-			
+
 			request.setAttribute("payments", all);
 			request.setAttribute("qtPendent", allPendentPayments.size());
 			request.setAttribute("qtPaid", allPaidPayments.size());
@@ -229,4 +241,9 @@ public class PaymentController {
 		return payTypes;
 	}
 	
+	private void putMapOnRequestAttribute(Map<String, Object> values, HttpServletRequest request){
+		for (String key : values.keySet()) {
+			request.setAttribute(key, values.get(key));
+		}
+	}
 }

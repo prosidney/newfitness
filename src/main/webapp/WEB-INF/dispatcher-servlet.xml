@@ -17,8 +17,8 @@
 						http://www.springframework.org/schema/security 
 						http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 
-	<context:component-scan base-package="br.com.newfitness" />
-		
+	<context:component-scan base-package="br.com.newfitness" />			
+	
 	<bean id="authenticationSuccessHandler" class="br.com.newfitness.authenticator.CustomAuthenticationSuccessHandler">
 	  <property name="defaultTargetUrl" value="/pages/admin"/>
 	</bean>	

@@ -55,7 +55,7 @@
 						</td>
 						<td><input type="hidden" name="mat" value="${mat}" /></td>
 						<td> 
-							<a class="btn" href="#" onclick="document.forms[1].submit()"> <i class="icon-plus-sign icon-black"></i> Gerar </a> 
+							<a class="btn" href="#" onclick="document.forms[0].submit()"> <i class="icon-plus-sign icon-black"></i> Gerar </a> 
 						</td>
 					</tr>
         		</table>

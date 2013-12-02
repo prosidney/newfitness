@@ -194,9 +194,6 @@ public class Aluno implements Serializable {
 	}
 
 	public List<Payment> getPayments() {
-		if(payments != null){
-			Collections.sort(payments);
-		}
 		return payments;
 	}
 

@@ -55,8 +55,16 @@
 		<property name="username" value="sa" />
 		<property name="password" value="" />
 	</bean>
-	
-	<mvc:annotation-driven />
+
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="br.com.newfitness.json.MappingJackson2HttpMessageConverter">
+				<property name="objectMapper">
+					<bean class="br.com.newfitness.json.HibernateAwareObjectMapper" />
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
 	

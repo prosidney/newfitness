@@ -23,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.com.newfitness.dao.impl.AlunoDao;
 import br.com.newfitness.dao.impl.GymDao;
@@ -93,6 +94,44 @@ public class PaymentController {
 	}
 	
 	@Transactional(readOnly=true)
+	@RequestMapping(value="/viewPaymentsByMatJson.do", method=RequestMethod.GET)
+	public @ResponseBody List<Payment> showClientPaymentsJson(HttpServletRequest request, HttpServletResponse response){
+		String matId = request.getParameter("mat");
+		String currPage = request.getParameter("page");
+		String itensPerPage = StringUtils.defaultIfEmpty(request.getParameter("itensPerPage"), FIVE.toString()) ;
+		List<Payment> all = new ArrayList<Payment>();
+		
+		if(matId != null && StringUtils.isNotEmpty(matId) && StringUtils.isAlphanumeric(matId)){
+			Integer size = 0;
+			if(StringUtils.isEmpty(currPage)){
+				all = paymentDao.findAllPaymentsByMat(Integer.parseInt(matId));
+				size = all.size();
+				
+				itensPerPage = size.toString();
+				currPage = ONE.toString();
+			} else {
+				all = paymentDao.findAllPaymentsByMat(Integer.parseInt(matId), Integer.parseInt(currPage) , Integer.parseInt(itensPerPage));
+				size = paymentDao.findAllPaymentsByMatCount(Integer.parseInt(matId)).intValue();
+			}
+			
+			
+			HashMap<String, Object> valuesToRequest = new HashMap<String, Object>();
+			
+			valuesToRequest.put("payments", all);
+			valuesToRequest.put("mat", matId);
+			
+			valuesToRequest.put("totalItens", size);
+			valuesToRequest.put("itensPerPage", itensPerPage);
+			valuesToRequest.put("currentPage", currPage);
+			
+			putMapOnRequestAttribute(valuesToRequest, request);
+			
+		}
+		
+		return all;
+	}
+	
+	@Transactional(readOnly=true)
 	@RequestMapping(value="/addPayment.do", method={RequestMethod.GET})
 	public String showAddPaymentPage(HttpServletRequest request, HttpServletResponse response, Model model){
 		List<Gym> findAll = gymDao.findAll();
@@ -142,7 +181,9 @@ public class PaymentController {
 		pay.setAluno(aluno);
 		paymentDao.save(pay);
 			
-		request.setAttribute("payments", aluno.getPayments());
+		List<Payment> payments = aluno.getPayments();
+		Collections.sort(payments);
+		request.setAttribute("payments", payments);
 		request.setAttribute("mat", aluno.getMatricula());
 		request.setAttribute("totalItens", aluno.getPayments().size());
 		
@@ -166,7 +207,10 @@ public class PaymentController {
 			
 			List<Payment> newPayments = util.generatePayments(aluno, gc.getTime());
 			paymentDao.saveAll(newPayments);
-			aluno.getPayments().addAll(newPayments);
+			
+			List<Payment> payments = aluno.getPayments();
+			Collections.sort(payments);
+			payments.addAll(newPayments);
 			
 			List<Payment> allPaidPayments = paymentDao.findAllPaidPaymentsByMatId(Integer.valueOf(matId));
 			List<Payment> allPendentPayments = paymentDao.findAllPendentPaymentsByMatId(Integer.valueOf(matId));

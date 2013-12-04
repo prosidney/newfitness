@@ -82,7 +82,7 @@ public class MappingJackson2HttpMessageConverter extends AbstractHttpMessageConv
         this.objectMapper.getJsonFactory().createJsonGenerator(outputMessage.getBody(), encoding);
         try {
             if (this.prefixJson) {
-                jsonGenerator.writeRaw("{} && ");
+                jsonGenerator.writeRaw("[] && ");
             }
             this.objectMapper.writeValue(jsonGenerator, object);
         }

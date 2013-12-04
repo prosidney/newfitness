@@ -144,7 +144,7 @@ public class PaymentDao extends AbstractDao<Payment> implements GenericDao<Payme
 
 		return query.list();
 	}
-
+	
 	public Long findAllPaymentsByMatCount(int matId) {
 		StringBuilder hql = new StringBuilder("SELECT count(*) FROM Payment pm WHERE ")
 		.append(" pm.aluno.matricula = :matId");
@@ -156,5 +156,19 @@ public class PaymentDao extends AbstractDao<Payment> implements GenericDao<Payme
 
 		return (Long) query.uniqueResult();
 	
+	}
+	
+	public List<Payment> findAllPaymentsByByMatFirstPage(Integer matId, Integer firstItemPosition, Integer itensPerPage) {
+		StringBuilder hql = new StringBuilder("SELECT pm FROM Payment pm WHERE ")
+		.append(" pm.aluno.matricula = :matId order by expirationDate desc ");
+		
+		Query query = sessionFactory.getCurrentSession()
+				.createQuery(hql.toString())
+				.setFirstResult( firstItemPosition )
+				.setMaxResults( itensPerPage );
+		
+		query.setParameter("matId", matId);
+		
+		return query.list();
 	}
 }

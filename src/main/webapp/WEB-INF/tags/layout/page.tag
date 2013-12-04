@@ -48,6 +48,11 @@
 
 		<script type="text/javascript" src="/js/simplePagination.js"></script>
 		<link type="text/css" rel="stylesheet" href="/css/simplePagination.css"/>
+		
+		<script type="text/javascript" language="javascript" src="/js/jquery-1.9.1.js"></script>
+		<script type="text/javascript" language="javascript" src="/js/jquery.dataTables.js"></script>
+		<link type="text/css" rel="stylesheet" href="/css/jquery.dataTables.css"/>
+		<link type="text/css" rel="stylesheet" href="/css/jquery.dataTables_themeroller.css"/>
         
         <script type="text/javascript">
 			function enforceNumericValue(obj){  
@@ -114,6 +119,8 @@
 	    <script src="/js/bootstrap-carousel.js"></script>
 	    <script src="/js/bootstrap-typeahead.js"></script>
 		<script src="/js/simplePagination.js"></script>
+		<script src="/js/jquery-1.9.1.js"></script>
+		<script src="/js/jquery.dataTables.js"></script>
     </body>
 </html>
 

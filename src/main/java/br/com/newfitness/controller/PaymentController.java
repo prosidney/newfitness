@@ -29,6 +29,7 @@ import br.com.newfitness.dao.impl.AlunoDao;
 import br.com.newfitness.dao.impl.GymDao;
 import br.com.newfitness.dao.impl.ParameterDao;
 import br.com.newfitness.dao.impl.PaymentDao;
+import br.com.newfitness.json.JsonDataTableReturn;
 import br.com.newfitness.model.Aluno;
 import br.com.newfitness.model.Gym;
 import br.com.newfitness.model.Payment;
@@ -95,13 +96,50 @@ public class PaymentController {
 	
 	@Transactional(readOnly=true)
 	@RequestMapping(value="/viewPaymentsByMatJson.do", method=RequestMethod.GET)
-	public @ResponseBody List<Payment> showClientPaymentsJson(HttpServletRequest request, HttpServletResponse response){
+	public @ResponseBody JsonDataTableReturn showClientPaymentsJson(HttpServletRequest request, HttpServletResponse response){
+		String matId = request.getParameter("mat");
+		String firstItemPosition = request.getParameter("iDisplayStart");
+		String itensPerPage = StringUtils.defaultIfEmpty(request.getParameter("iDisplayLength"), FIVE.toString());
+		String sEcho = request.getParameter("sEcho");
+		
+		List<Payment> all = new ArrayList<Payment>();
+		Integer size = 0;
+		
+		if(matId != null && StringUtils.isNotEmpty(matId) && StringUtils.isAlphanumeric(matId)){
+			if(StringUtils.isEmpty(firstItemPosition)){
+				all = paymentDao.findAllPaymentsByMat(Integer.parseInt(matId));
+				size = all.size();
+				
+				itensPerPage = size.toString();
+				firstItemPosition = ONE.toString();
+			} else {
+				all = paymentDao.findAllPaymentsByByMatFirstPage(Integer.parseInt(matId), Integer.parseInt(firstItemPosition) , Integer.parseInt(itensPerPage));
+				size = paymentDao.findAllPaymentsByMatCount(Integer.parseInt(matId)).intValue();
+			}
+		}
+		
+		JsonDataTableReturn dataTableReturn = new JsonDataTableReturn();
+		dataTableReturn.setsEcho(Integer.parseInt(sEcho));
+		dataTableReturn.setiTotalRecords(size);
+		dataTableReturn.setiTotalDisplayRecords(size);
+		
+/*		for (Payment payment : all) {
+			payment.setAluno(null);
+		}*/
+		dataTableReturn.setAaData(all.toArray());
+		
+		return dataTableReturn;
+	}
+	
+	@Transactional(readOnly=true)
+	@RequestMapping(value="/viewPaymentsByMatDataTable.do", method=RequestMethod.GET)
+	public String showClientPaymentsDataTable(HttpServletRequest request, HttpServletResponse response){
 		String matId = request.getParameter("mat");
 		String currPage = request.getParameter("page");
 		String itensPerPage = StringUtils.defaultIfEmpty(request.getParameter("itensPerPage"), FIVE.toString()) ;
-		List<Payment> all = new ArrayList<Payment>();
 		
 		if(matId != null && StringUtils.isNotEmpty(matId) && StringUtils.isAlphanumeric(matId)){
+			List<Payment> all = new ArrayList<Payment>();
 			Integer size = 0;
 			if(StringUtils.isEmpty(currPage)){
 				all = paymentDao.findAllPaymentsByMat(Integer.parseInt(matId));
@@ -125,10 +163,9 @@ public class PaymentController {
 			valuesToRequest.put("currentPage", currPage);
 			
 			putMapOnRequestAttribute(valuesToRequest, request);
-			
 		}
 		
-		return all;
+		return "paymentsListDataTable";
 	}
 	
 	@Transactional(readOnly=true)

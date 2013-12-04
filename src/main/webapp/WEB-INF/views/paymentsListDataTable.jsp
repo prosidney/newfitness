@@ -14,6 +14,13 @@
 			        "sAjaxSource": "../pages/viewPaymentsByMatJson.do?mat=1",
 					"bPaginate": true,
 			        "sPaginationType": "full_numbers",
+			        "oLanguage": {
+			            "sLengthMenu": "Exibir _MENU_ registros por página ",
+			            "sZeroRecords": "Não foi encontrado registros - desculpe",
+			            "sInfo": "Exibindo _START_ até _END_ de _TOTAL_ registros",
+			            "sInfoEmpty": "Exibindo 0 até 0 de 0 registros",
+			            "sInfoFiltered": "(filtrado from _MAX_ total records)"
+			        },
 					"aoColumns": [
 					  			{ "mDataProp": "id" },
 					  			{ "mDataProp": "amount" },

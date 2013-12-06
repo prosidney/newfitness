@@ -2,7 +2,7 @@ package br.com.newfitness.model;
 
 public enum PaymentType {
 
-	DI("Dinheiro"), CA("Cart√£o"), CH("Cheque");
+	DI("Dinheiro"), CA("Cart„o"), CH("Cheque");
 
 	private String desc;	
 	

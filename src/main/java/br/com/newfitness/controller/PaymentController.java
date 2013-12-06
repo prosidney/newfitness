@@ -100,7 +100,7 @@ public class PaymentController {
 		String matId = request.getParameter("mat");
 		String firstItemPosition = request.getParameter("iDisplayStart");
 		String itensPerPage = StringUtils.defaultIfEmpty(request.getParameter("iDisplayLength"), FIVE.toString());
-		String sEcho = request.getParameter("sEcho");
+		String sEcho = StringUtils.defaultIfEmpty(request.getParameter("sEcho"), ONE.toString());
 		
 		List<Payment> all = new ArrayList<Payment>();
 		Integer size = 0;
@@ -122,10 +122,6 @@ public class PaymentController {
 		dataTableReturn.setsEcho(Integer.parseInt(sEcho));
 		dataTableReturn.setiTotalRecords(size);
 		dataTableReturn.setiTotalDisplayRecords(size);
-		
-/*		for (Payment payment : all) {
-			payment.setAluno(null);
-		}*/
 		dataTableReturn.setAaData(all.toArray());
 		
 		return dataTableReturn;

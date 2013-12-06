@@ -52,7 +52,10 @@
 		<script type="text/javascript" language="javascript" src="/js/jquery-1.9.1.js"></script>
 		<script type="text/javascript" language="javascript" src="/js/jquery.dataTables.js"></script>
 		<link type="text/css" rel="stylesheet" href="/css/jquery.dataTables.css"/>
-		<link type="text/css" rel="stylesheet" href="/css/jquery.dataTables_themeroller.css"/>
+		<!--
+			Como estou o tema do Twitter Bootstrap, vou ignorar esse CSS 
+			<link type="text/css" rel="stylesheet" href="/css/jquery.dataTables_themeroller.css"/> 
+		-->
         
         <script type="text/javascript">
 			function enforceNumericValue(obj){  

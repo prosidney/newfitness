@@ -7,15 +7,19 @@
     <jsp:attribute name="extraHeader">
 		<script type="text/javascript">
 			$(document).ready( function() {
+				var matId = '${mat}';
 				$('#example').dataTable( {
-					"bJQueryUI": true,
+					//"bJQueryUI": true,
+					"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
+        			"sPaginationType": "bootstrap",
 					"bProcessing": true,
 			        "bServerSide": true,
-			        "sAjaxSource": "../pages/viewPaymentsByMatJson.do?mat=1",
+			        "sAjaxSource": "../pages/viewPaymentsByMatJson.do?mat=" + matId,
 					"bPaginate": true,
+					"bFilter": false,
 			        "sPaginationType": "full_numbers",
 			        "oLanguage": {
-			            "sLengthMenu": "Exibir _MENU_ registros por página ",
+			            "sLengthMenu": "Exibir _MENU_ registros por pagina",
 			            "sZeroRecords": "Não foi encontrado registros - desculpe",
 			            "sInfo": "Exibindo _START_ até _END_ de _TOTAL_ registros",
 			            "sInfoEmpty": "Exibindo 0 até 0 de 0 registros",
@@ -23,9 +27,24 @@
 			        },
 					"aoColumns": [
 					  			{ "mDataProp": "id" },
+					  			{ "mDataProp": "aluno.nome" },
 					  			{ "mDataProp": "amount" },
-					  			{ "mDataProp": "expirationDate" },
-					  			{ "mDataProp": "dtPayment" },
+					  			{ "mDataProp": "expirationDate", 
+					  			  	"mRender": function ( data, type, full ) {
+		  			  					var d = new Date(data);
+		  		        				return d.getUTCDate() + '/' + (d.getUTCMonth() + 1)  + '/' + d.getUTCFullYear();
+		  		        			}  
+					  			},
+					  			{ "mDataProp": "dtPayment" ,
+					  			  	"mRender": function ( data, type, full ) {
+					  			  		if(data != null){
+			  			  					var d = new Date(data);
+			  		        				return d.getUTCDate() + '/' + (d.getUTCMonth() + 1)  + '/' + d.getUTCFullYear();
+					  			  		} else {
+					  			  			return 'Não efetuado';
+					  			  		}
+		  		        			} 
+					  			},
 					  			{ "mDataProp": "paymentType" },
 					  			{ "mDataProp": "observation" }
 					  		]
@@ -40,6 +59,7 @@
 				    <thead>
 				        <tr>
 				            <th>ID</th>
+				            <th style="width: 218px">Nome</th>
 				            <th>Valor</th>
 				            <th>Data de vencimento</th>
 				            <th>Data do pagamento</th>

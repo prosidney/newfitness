@@ -19,11 +19,21 @@
 					"bFilter": false,
 			        "sPaginationType": "full_numbers",
 			        "oLanguage": {
-			            "sLengthMenu": "Exibir _MENU_ registros por pagina",
-			            "sZeroRecords": "Não foi encontrado registros - desculpe",
-			            "sInfo": "Exibindo _START_ até _END_ de _TOTAL_ registros",
-			            "sInfoEmpty": "Exibindo 0 até 0 de 0 registros",
-			            "sInfoFiltered": "(filtrado from _MAX_ total records)"
+			        	"sProcessing":   "Processando...",
+			            "sLengthMenu":   "Mostrar _MENU_ registros",
+			            "sZeroRecords":  "Não foram encontrados resultados",
+			            "sInfo":         "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+			            "sInfoEmpty":    "Mostrando de 0 até 0 de 0 registros",
+			            "sInfoFiltered": "(filtrado de _MAX_ registros no total)",
+			            "sInfoPostFix":  "",
+			            "sSearch":       "Buscar:",
+			            "sUrl":          "",
+			            "oPaginate": {
+			                "sFirst":    "Primeiro",
+			                "sPrevious": "Anterior",
+			                "sNext":     "Seguinte",
+			                "sLast":     "Último"
+			            }
 			        },
 					"aoColumns": [
 					  			{ "mDataProp": "id" },

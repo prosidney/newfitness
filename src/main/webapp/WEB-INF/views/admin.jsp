@@ -64,7 +64,7 @@
 						<td><c:out value="${aluno.status}" /></td>
 						<td>
 							<a class="btn" href="<c:url value="addClient.do?mat=${aluno.matricula}"/>"><i class="icon-edit icon-black" ></i> </a>						
-							<a class="btn" href="<c:url value="viewPaymentsByMat.do?mat=${aluno.matricula}"/>"><i class="icon-eye-open icon-black" ></i> </a>
+							<a class="btn" href="<c:url value="viewPaymentsByMatDataTable.do?mat=${aluno.matricula}"/>"><i class="icon-eye-open icon-black" ></i> </a>
 							<a class="btn" href="<c:url value="addPayment.do?mat=${aluno.matricula}"/>"><i class="icon-plus-sign icon-black"></i> </a>
 						</td>
 					</tr>

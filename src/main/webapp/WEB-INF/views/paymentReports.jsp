@@ -39,86 +39,104 @@
 		        // Instantiate and draw our chart, passing in some options.
 		        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
 		        chart.draw(data, options);
-		    }		
+		    }
+		    
+			$(document).ready( function() {
+				var matId = '${mat}';
+				$('#example').dataTable( {
+					//"bJQueryUI": true,
+					"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
+        			"sPaginationType": "bootstrap",
+					"bProcessing": true,
+			        "bServerSide": true,
+			        "sAjaxSource": "../pages/paymentsReportJson.do",
+					"bPaginate": true,
+					"bFilter": false,
+			        "sPaginationType": "full_numbers",
+			        "oLanguage": {
+			        	"sProcessing":   "Processando...",
+			            "sLengthMenu":   "Mostrar _MENU_ registros",
+			            "sZeroRecords":  "Não foram encontrados resultados",
+			            "sInfo":         "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+			            "sInfoEmpty":    "Mostrando de 0 até 0 de 0 registros",
+			            "sInfoFiltered": "(filtrado de _MAX_ registros no total)",
+			            "sInfoPostFix":  "",
+			            "sSearch":       "Buscar:",
+			            "sUrl":          "",
+			            "oPaginate": {
+			                "sFirst":    "Primeiro",
+			                "sPrevious": "Anterior",
+			                "sNext":     "Seguinte",
+			                "sLast":     "Último"
+			            }
+			        },
+					"aoColumns": [
+					  			{ "mDataProp": "id" },
+					  			{ "mDataProp": "aluno.nome" },
+					  			{ "mDataProp": "amount" },
+					  			{ "mDataProp": "expirationDate", 
+					  			  	"mRender": function ( data, type, full ) {
+		  			  					var d = new Date(data);
+		  		        				return d.getUTCDate() + '/' + (d.getUTCMonth() + 1)  + '/' + d.getUTCFullYear();
+		  		        			}  
+					  			},
+					  			{ "mDataProp": "dtPayment" ,
+					  			  	"mRender": function ( data, type, full ) {
+					  			  		if(data != null){
+			  			  					var d = new Date(data);
+			  		        				return d.getUTCDate() + '/' + (d.getUTCMonth() + 1)  + '/' + d.getUTCFullYear();
+					  			  		} else {
+					  			  			return 'Não efetuado';
+					  			  		}
+		  		        			} 
+					  			},
+					  			{ "mDataProp": "paymentType" },
+					  			{ "mDataProp": "observation" }
+					  		]
+				} );
+			} );
 		 </script>
     </jsp:attribute>
     <jsp:body>
     	<jsp:useBean id="now" class="java.util.Date" />
 		<fmt:formatDate var="year" value="${now}" pattern="yyyy" />
         <center>
-			<!--Div that will hold the pie chart-->
- 			<div id="chart_div" > </div>  
-        	<form method="post" action="viewPaymentsReportByMemberName.do">
-        		<table class="table" style="width: 30%">
-        			<tr>
-        				<td colspan="3"><center> <c:out value="Buscar" /> </center></td>
-        			</tr>
-	        		<tr>	
-						<td><c:out value="Nome" /></td>
-						<td><input type="text" name="name"/></td>
-						<td> <a class="btn" href="#" onclick="document.forms[0].submit()"><i class="icon-search icon-black"></i> Buscar </a> </td>
-					</tr>
-        		</table>
-        	</form>
-			<table class="table table-hover" style="width: 85%">
-				<tr>
-					<th colspan="6" style="text-align: center;"><c:out value="Detalhes" /></th>
-				</tr>
-				<tr>
-					<th style="width: 40%"><c:out value="Nome" /></th>
-					<th style="width: 5%"><c:out value="Valor" /></th>
-					<th style="width: 15%"><c:out value="Data do Vencimento" /></th>
-					<th style="width: 15%"><c:out value="Data do Pagamento" /></th>
-					<th style="width: 15%"><c:out value="Tipo de pagamento" /></th>
-					<th><c:out value="Ações" /></th>
-				</tr>
-				<c:set var="totalPaid" scope="request" value="${0}"/>
-				<c:set var="totalNotPaid" scope="request" value="${0}"/>
-				<c:forEach var="payment" items="${payments}">
-					<c:choose>
-						<c:when test="${payment.dtPayment != null}">
-						  	<tr class="success">
-						</c:when>
-						<c:otherwise>
-							<tr class="warning">
-						</c:otherwise>						
-					</c:choose>
-						<td><c:out value="${payment.aluno.nome}" /></td>
-						<td><c:out value="${payment.amount}" /></td>
-						<td><fmt:formatDate pattern="dd/MM/yyyy" value="${payment.expirationDate}" /></td>
-						<td><fmt:formatDate pattern="dd/MM/yyyy" value="${payment.dtPayment}" /></td>
-						<td><c:out value="${payment.paymentType}" /></td>
-						<td>
-							<a class="btn" href="<c:url value="addPayment.do?payId=${payment.id}&mat=${payment.aluno.matricula}"/>"><i class="icon-edit icon-black" ></i> </a>
-						</td>						
-					</tr>
-					<c:choose>
-						<c:when test="${payment.dtPayment != null}">
-							<c:set var="totalPaid" scope="request" value="${totalPaid + payment.amount}"/>
-						</c:when>
-						<c:otherwise>
-							<c:set var="totalNotPaid" scope="request" value="${totalNotPaid + payment.amount}"/>
-						</c:otherwise>						
-					</c:choose>					
-				</c:forEach>
-				<tr>
-					<th colspan="4" style="text-align: right;" style="width: 50%">
-						<c:out value="Total a pagar = " />
-					</th>
-					<th colspan="3" style="text-align: left;" style="width: 30%">
-						<c:out value="${totalNotPaid} R$" />
-					</th>
-				</tr>
-				<tr>
-					<th colspan="4" style="text-align: right;" style="width: 50%">
-						<c:out value="Total pago = " />
-					</th>				
-					<th colspan="3" style="text-align: left;" style="width: 30%">
-						<c:out value="${totalPaid} R$" />
-					</th>
-				</tr>
-			</table>
-			<a class="btn" href="admin"><i class="icon-backward icon-black"></i> Voltar </a>
+        	<div id="container" style="width: 80%">
+				<!--Div that will hold the pie chart-->
+	 			<div id="chart_div" > </div>  
+				<%--
+				TODO Depois ver a necessidade dessa busca
+				<form method="post" action="viewPaymentsReportByMemberName.do">
+	        		<table class="table" style="width: 30%">
+	        			<tr>
+	        				<td colspan="3"><center> <c:out value="Buscar" /> </center></td>
+	        			</tr>
+		        		<tr>	
+							<td><c:out value="Nome" /></td>
+							<td><input type="text" name="name"/></td>
+							<td> <a class="btn" href="#" onclick="document.forms[0].submit()"><i class="icon-search icon-black"></i> Buscar </a> </td>
+						</tr>
+	        		</table>
+	        	</form> 
+	        	--%>
+	        	
+	        	<table id="example">
+				    <thead>
+				        <tr>
+				            <th>ID</th>
+				            <th style="width: 218px">Nome</th>
+				            <th>Valor</th>
+				            <th>Data de vencimento</th>
+				            <th>Data do pagamento</th>
+				            <th>Tipo do Pagamento</th>
+				            <th>Observação</th>
+				        </tr>
+				    </thead>
+				    <tbody></tbody>
+				</table>      
+					
+				<a class="btn" href="admin"><i class="icon-backward icon-black"></i> Voltar </a>
+			</div>
 		</center>        
     </jsp:body>
 </layout:page>

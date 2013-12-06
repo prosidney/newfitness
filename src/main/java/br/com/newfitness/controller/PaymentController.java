@@ -58,7 +58,8 @@ public class PaymentController {
 	@Autowired
 	Util util;
 	
-	@Transactional(readOnly=true)
+/*	TODO DELETAR LOGO MENOS
+ * 	@Transactional(readOnly=true)
 	@RequestMapping(value="/viewPaymentsByMat.do", method=RequestMethod.GET)
 	public String showClientPayments(HttpServletRequest request, HttpServletResponse response){
 		String matId = request.getParameter("mat");
@@ -93,7 +94,7 @@ public class PaymentController {
 		}
 		
 		return "paymentsList";
-	}
+	}*/
 	
 	@Transactional(readOnly=true)
 	@RequestMapping(value="/viewPaymentsByMatJson.do", method=RequestMethod.GET)
@@ -260,7 +261,7 @@ public class PaymentController {
 		return "paymentsList";
 	}
 	
-	@Transactional(readOnly=true)
+  	@Transactional(readOnly=true)
 	@RequestMapping(value="/paymentsReport.do", method=RequestMethod.GET)
 	public String showAllPayments(HttpServletRequest request, HttpServletResponse response){
 		List<Payment> allPaidPayments = paymentDao.findAllPaidPayments();
@@ -272,6 +273,29 @@ public class PaymentController {
 		request.setAttribute("qtPaid", allPaidPayments.size());
 		
 		return "paymentReports";
+	}
+	
+	@Transactional(readOnly=true)
+	@RequestMapping(value="/paymentsReportJson.do", method=RequestMethod.GET)
+	public @ResponseBody JsonDataTableReturn showAllPaymentsJson(HttpServletRequest request, HttpServletResponse response){
+		List<Payment> allPaidPayments = paymentDao.findAllPaidPayments();
+		List<Payment> allPendentPayments = paymentDao.findAllPendentPayments();
+		List<Payment> all = unionPayments(allPaidPayments, allPendentPayments);
+		
+		request.setAttribute("payments", all);
+		request.setAttribute("qtPendent", allPendentPayments.size());
+		request.setAttribute("qtPaid", allPaidPayments.size());
+		
+		JsonDataTableReturn dataTableReturn = new JsonDataTableReturn();
+		
+		String sEcho = StringUtils.defaultIfEmpty(request.getParameter("sEcho"), ONE.toString());
+		
+		dataTableReturn.setsEcho(Integer.parseInt(sEcho));
+		dataTableReturn.setiTotalRecords(all.size());
+		dataTableReturn.setiTotalDisplayRecords(all.size());
+		dataTableReturn.setAaData(all.toArray());
+		
+		return dataTableReturn;
 	}	
 	
 	@Transactional(readOnly=true)
@@ -282,7 +306,8 @@ public class PaymentController {
 		return "paymentsList";
 	}
 	
-	@Transactional(readOnly=true)
+/*	TODO TALVEZ ISSO SEJA UTIL
+ * 	@Transactional(readOnly=true)
 	@RequestMapping(value="/viewPaymentsReportByMemberName.do", method=RequestMethod.POST)
 	public String findPaymentsByClientNameReport(HttpServletRequest request){
 		String clientName = request.getParameter("name");
@@ -296,7 +321,7 @@ public class PaymentController {
 		request.setAttribute("qtPaid", allPaidPayments.size());
 		
 		return "paymentReports";
-	}
+	}*/
 	
 	private List<Payment> unionPayments(List<Payment> allPaidPayments, List<Payment> allPendentPayments) {
 		List<Payment> all = new ArrayList<Payment>();

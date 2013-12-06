@@ -33,6 +33,7 @@ import br.com.newfitness.json.JsonDataTableReturn;
 import br.com.newfitness.model.Aluno;
 import br.com.newfitness.model.Gym;
 import br.com.newfitness.model.Payment;
+import br.com.newfitness.model.PaymentType;
 import br.com.newfitness.util.Util;
 
 
@@ -311,9 +312,9 @@ public class PaymentController {
 	
 	private Map<String, String> generateTypes() {
 		Map<String,String> payTypes = new LinkedHashMap<String,String>();
-		payTypes.put("DI", "Dinheiro");
-		payTypes.put("CA", "Cart�o");
-		payTypes.put("CH", "Cheque");
+		payTypes.put(PaymentType.MONEY.name(), PaymentType.MONEY.getStatusCode());
+		payTypes.put(PaymentType.CARD.name(), PaymentType.CARD.getStatusCode());
+		payTypes.put(PaymentType.TICKET.name(), PaymentType.TICKET.getStatusCode());
 		
 		return payTypes;
 	}

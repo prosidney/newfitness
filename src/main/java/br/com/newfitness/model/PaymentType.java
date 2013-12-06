@@ -2,15 +2,15 @@ package br.com.newfitness.model;
 
 public enum PaymentType {
 
-	DI("Dinheiro"), CA("Cartão"), CH("Cheque");
+	MONEY("M"), CARD("C"), TICKET("T");
 
-	private String desc;	
+	private String statusCode;	
 	
-	private PaymentType(String descricao) {
-		this.desc = descricao;
+	private PaymentType(String statusCode) {
+		this.statusCode = statusCode;
 	}
 
-	public String toString() {
-		return this.desc;
+	public String getStatusCode() {
+		return statusCode;
 	}
 }

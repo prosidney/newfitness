@@ -80,7 +80,7 @@ public class Util {
 		firstPayment.setAmount(amount);
 		firstPayment.setAluno(member);
 		firstPayment.setDtPayment(null);
-		firstPayment.setPaymentType(PaymentType.DI);
+		firstPayment.setPaymentType(PaymentType.MONEY);
 		firstPayment.setExpirationDate(gregorianCount.getTime());
 		payments.add(firstPayment);
 		
@@ -92,7 +92,7 @@ public class Util {
 			payment.setAluno(member);
 			payment.setDtPayment(null);
 			payment.setExpirationDate(gregorianCount.getTime());
-			payment.setPaymentType(PaymentType.DI);
+			payment.setPaymentType(PaymentType.MONEY);
 			payments.add(payment);
 			
 			gregorianCount.add(Calendar.MONTH, 1);
